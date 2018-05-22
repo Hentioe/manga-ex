@@ -16,7 +16,8 @@ defmodule Manga do
     :world
   end
 
-  def main(args \\ []) do
+  def main(_args \\ []) do
     IO.puts("Hello from manga!")
+
   end
 end
