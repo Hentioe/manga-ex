@@ -11,7 +11,7 @@ defmodule Manga.HTTPClient do
   ]
 
   def get(url, options \\ @default_options) do
-    HP.get(url, headers: ["User-Agent": options[:"user-agent"]])
+    HP.get(url, headers: ["User-Agent": options[:"user-agent"]], timeout: 10 * 1000)
   end
 end
 
@@ -24,5 +24,9 @@ defmodule Manga.HTTPClient.Response do
 
   def success?(resp) do
     HPR.success?(resp)
+  end
+
+  def status_code?(resp, status_code) do
+    resp.status_code == status_code
   end
 end
