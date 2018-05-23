@@ -13,5 +13,5 @@ end
 defmodule Manga.Res.Info do
   @default_name "Default manga name"
   @default_url "scheme://domain/path"
-  defstruct name: @default_name, url: @default_url, number_list: [%Manga.Res.Stage{}]
+  defstruct name: @default_name, url: @default_url, stage_list: [%Manga.Res.Stage{}]
 end

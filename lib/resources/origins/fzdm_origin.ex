@@ -8,8 +8,47 @@ defmodule Manga.Res.FZDMOrigin do
   @url_prefix "http://p0.xiaoshidi.net/"
   @url_regex ~r/mhurl="([^"]+)"/
 
-  def search(_words) do
-    {:error, "Not implemented"}
+  def index(_) do
+    index()
+  end
+
+  def index do
+    resp = HC.get("https://manhua.fzdm.com/")
+
+    if(HCR.success?(resp)) do
+      list =
+        resp
+        |> HCR.body()
+        |> Floki.find("ul > div.round > li > a")
+        |> Enum.with_index()
+        |> Enum.filter(fn {linkNode, i} -> rem(i, 2) != 0 end)
+        |> Enum.map(fn {linkNode, i} -> linkNode end)
+        |> Enum.map(fn linkNode ->
+          %Info{
+            name: linkNode |> Floki.attribute("title") |> List.first(),
+            url:
+              "https://manhua.fzdm.com/" <> (linkNode |> Floki.attribute("href") |> List.first())
+          }
+        end)
+
+      {:ok, list}
+    else
+      {:error, "Get index falied"}
+    end
+  end
+
+  def search(words) do
+    case index() do
+      {:ok, list} ->
+        list =
+          list
+          |> Enum.filter(fn manga -> manga.name |> String.contains?(words) end)
+
+        {:ok, list}
+
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   def stages(info) do

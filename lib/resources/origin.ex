@@ -1,4 +1,5 @@
 defmodule Manga.Res.Origin do
+  @callback index(String.t()) :: {:ok, [Manga.Res.Info.t()]} | {:error, String.t()}
   @callback search(String.t()) :: {:ok, [Manga.Res.Info.t()]} | {:error, String.t()}
   @callback stages(Manga.Res.Info.t()) :: {:ok, [Manga.Res.Stage.t()]} | {:error, String.t()}
   @callback fetch(Manga.Res.Stage.t()) :: {:ok, [Manga.Res.Page.t()]} | {:error, String.t()}
