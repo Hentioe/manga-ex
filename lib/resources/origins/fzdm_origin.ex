@@ -21,8 +21,8 @@ defmodule Manga.Res.FZDMOrigin do
         |> HCR.body()
         |> Floki.find("ul > div.round > li > a")
         |> Enum.with_index()
-        |> Enum.filter(fn {linkNode, i} -> rem(i, 2) != 0 end)
-        |> Enum.map(fn {linkNode, i} -> linkNode end)
+        |> Enum.filter(fn {_, i} -> rem(i, 2) != 0 end)
+        |> Enum.map(fn {linkNode, _} -> linkNode end)
         |> Enum.map(fn linkNode ->
           %Info{
             name: linkNode |> Floki.attribute("title") |> List.first(),
@@ -56,7 +56,7 @@ defmodule Manga.Res.FZDMOrigin do
       info.url
       |> HC.get()
       |> HCR.body()
-      |> Floki.find("li > a")
+      |> Floki.find("li.pure-u-1-2.pure-u-lg-1-4 > a")
       |> Enum.map(fn linkNode ->
         %Stage{
           name: Floki.text(linkNode),
