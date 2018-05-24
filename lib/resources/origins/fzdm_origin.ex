@@ -33,7 +33,7 @@ defmodule Manga.Res.FZDMOrigin do
 
       {:ok, list}
     else
-      {:error, "Get index falied"}
+      {:error, resp |> HCR.error_msg("Index:FZDM")}
     end
   end
 
@@ -52,19 +52,24 @@ defmodule Manga.Res.FZDMOrigin do
   end
 
   def stages(info) do
-    list =
-      info.url
-      |> HC.get()
-      |> HCR.body()
-      |> Floki.find("li.pure-u-1-2.pure-u-lg-1-4 > a")
-      |> Enum.map(fn linkNode ->
-        %Stage{
-          name: Floki.text(linkNode),
-          url: info.url <> (linkNode |> Floki.attribute("href") |> List.first())
-        }
-      end)
+    resp = HC.get(info.url)
 
-    {:ok, list}
+    if HCR.success?(resp) do
+      list =
+        resp
+        |> HCR.body()
+        |> Floki.find("li.pure-u-1-2.pure-u-lg-1-4 > a")
+        |> Enum.map(fn linkNode ->
+          %Stage{
+            name: Floki.text(linkNode),
+            url: info.url <> (linkNode |> Floki.attribute("href") |> List.first())
+          }
+        end)
+
+      {:ok, list}
+    else
+      {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
+    end
   end
 
   def fetch(stage, list \\ [], n \\ 0) do
@@ -85,7 +90,7 @@ defmodule Manga.Res.FZDMOrigin do
       if(HCR.status_code?(resp, 500)) do
         {:ok, list}
       else
-        {:error, "Fetch #{stage.name} failed"}
+        {:error, resp |> HCR.error_msg("Fetch:#{stage.name}")}
       end
     end
   end

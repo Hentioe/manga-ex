@@ -4,14 +4,14 @@ defmodule Manga.HTTPClient do
   @default_user_agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
 
   @default_options [
-    {
-      :"user-agent",
-      @default_user_agent
-    }
+    timeout: 10 * 1000,
+    headers: [
+      "User-Agent": @default_user_agent
+    ]
   ]
 
   def get(url, options \\ @default_options) do
-    HP.get(url, headers: ["User-Agent": options[:"user-agent"]], timeout: 10 * 1000)
+    HP.get(url, options)
   end
 end
 
@@ -23,10 +23,27 @@ defmodule Manga.HTTPClient.Response do
   end
 
   def success?(resp) do
-    HPR.success?(resp)
+    case resp do
+      %{message: _} -> false
+      _ -> HPR.success?(resp)
+    end
   end
 
   def status_code?(resp, status_code) do
     resp.status_code == status_code
+  end
+
+  def error_msg(resp, prefix_msg) do
+    case resp do
+      %{message: message} ->
+        "[#{prefix_msg}] #{message}"
+
+      %{status_code: status_code} ->
+        if status_code == 20 do
+          "[#{prefix_msg}] Normal state"
+        else
+          "[#{prefix_msg}] HTTP Status:#{status_code}"
+        end
+    end
   end
 end
