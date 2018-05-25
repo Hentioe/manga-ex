@@ -1,4 +1,6 @@
 defmodule Manga.DLUtils do
+  import Manga.IOUtils
+
   @base_path "./_res"
   @assets_path "#{@base_path}/assets"
   @cache_path "#{@base_path}/.cache"
@@ -14,7 +16,7 @@ defmodule Manga.DLUtils do
 
   def from_page(stage, page) do
     dir_name = "#{@assets_path}/#{stage.name}"
-    mkdir_not_exists([dir_name])
+    mkdir_not_exists(dir_name)
 
     case from(page.url, path: "#{dir_name}/#{page.p}.jpg") do
       {:ok, path} ->
@@ -29,7 +31,7 @@ defmodule Manga.DLUtils do
   def from_stage(stage) do
     dir_name = "#{@assets_path}/#{stage.name}"
 
-    mkdir_not_exists([dir_name])
+    mkdir_not_exists(dir_name)
 
     IO.puts("\n[Extracting] #{stage.name}")
 
@@ -41,14 +43,6 @@ defmodule Manga.DLUtils do
       end)
 
     {:ok, rlist}
-  end
-
-  defp mkdir_not_exists(path_list) do
-    Enum.each(path_list, fn path ->
-      if !File.exists?(path) do
-        File.mkdir(path)
-      end
-    end)
   end
 
   def init_assets_path do

@@ -1,16 +1,16 @@
-defmodule Manga.Res.Tpl.Epub do
-  def img_xhtml(src, title = "", alt = "") do
+defmodule Manga.Res.Epub.Tpl do
+  def img_xhtml(img_src, title \\ "", alt \\ "") do
     '
     <?xml version=\'1.0\' encoding=\'utf-8\'?>
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title><#{title}></title>
+        <title>#{title}</title>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
       <link href="stylesheet.css" rel="stylesheet" type="text/css"/>
       </head>
       <body class="album">
         <div>
-          <img src="#{src}" class="albumimg" alt="#{alt}"/>
+          <img src="#{img_src}" class="albumimg" alt="#{alt}"/>
         </div>
       </body>
     </html>
@@ -57,7 +57,7 @@ defmodule Manga.Res.Tpl.Epub do
         <navLabel>
             <text>Start</text>
         </navLabel>
-        <content src="0.xhtml"/>
+        <content src="1.xhtml"/>
         </navPoint>
     </navMap>
     </ncx>
@@ -90,20 +90,20 @@ defmodule Manga.Res.Tpl.Epub do
         </metadata>
         <manifest>
             <item href="stylesheet.css" id="css" media-type="text/css"/>
-            <%= for i <- 0..@res_length do %>
-                <item href="<%= @i %>.xhtml" id="html<%= @i %>" media-type="application/xhtml+xml"/>
-                <item href="<%= @i %>.jpg" id="img<%= @i %>" media-type="image/jpeg"/>
-            <% end %>
+        <%= for i <- 1..res_length do %>
+            <item href="<%= i %>.xhtml" id="html<%= i %>" media-type="application/xhtml+xml"/>
+            <item href="<%= i %>.jpg" id="img<%= i %>" media-type="image/jpeg"/>
+        <% end %>
             
             <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
         </manifest>
         <spine toc="ncx">
-        <%= for i <- 0..@res_length do %>
-            <itemref idref="html<%= @i %>"/>
+        <%= for i <- 0..res_length do %>
+            <itemref idref="html<%= i %>"/>
         <% end %>
         </spine>
     </package>      
-    ' |> List.to_string() |> EEx.eval_string(res_length)
+    ' |> List.to_string() |> EEx.eval_string(res_length: res_length)
   end
 
   def container_xml do
