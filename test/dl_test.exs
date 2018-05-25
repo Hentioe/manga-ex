@@ -4,13 +4,23 @@ defmodule Manga.DLUtilsTest do
   import Manga.Res.FZDMOrigin
 
   test "from_stage" do
-    {state, list} = stages(%Manga.Res.Info{url: "https://manhua.fzdm.com/2/"})
+    {state, info} = stages(%Manga.Res.Info{url: "https://manhua.fzdm.com/2/"})
     assert state == :ok
-    assert is_list(list)
-    assert length(list) > 0
+    assert length(info.stage_list) > 0
 
-    list
-    |> List.first()
-    |> from_stage(Manga.Res.FZDMOrigin)
+    {state, stage} =
+      info.stage_list
+      |> List.first()
+      |> fetch()
+
+    assert state == :ok
+    assert is_list(stage.plist)
+    assert length(stage.plist) > 0
+
+    {state, r} = from_stage(stage)
+
+    assert state == :ok
+    assert is_list(r)
+    assert length(r) > 0
   end
 end

@@ -30,7 +30,10 @@ defmodule Manga.HTTPClient.Response do
   end
 
   def status_code?(resp, status_code) do
-    resp.status_code == status_code
+    case resp do
+      %{message: _} -> false
+      _ -> resp.status_code == status_code
+    end
   end
 
   def error_msg(resp, prefix_msg) do

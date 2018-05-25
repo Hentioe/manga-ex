@@ -30,7 +30,8 @@ defmodule Manga.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:httpotion, "~> 3.1"},
       {:floki, "~> 0.20.2"},
-      {:download, "~> 0.0.4"}
+      {:download, "~> 0.0.4"},
+      {:uuid, "~> 1.1"}
     ]
   end
 end

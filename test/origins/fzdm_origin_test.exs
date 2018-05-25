@@ -12,16 +12,15 @@ defmodule Manga.Res.FZDMOriginTest do
   test "stages" do
     {state, result} = stages(%Manga.Res.Info{url: "https://manhua.fzdm.com/39/"})
     assert state == :ok
-    assert is_list(result)
-    assert length(result) > 0
+    assert is_list(result.stage_list)
+    assert length(result.stage_list) > 0
   end
 
-  # test "test fetch" do
-  #   {state, result} = fetch(%Manga.Res.Stage{url: "https://manhua.fzdm.com/39/001/"})
-  #   assert state == :ok
-  #   assert is_list(result)
-  #   assert length(result) == 52
-  # end
+  test "fetch" do
+    {state, result} = fetch(%Manga.Res.Stage{url: "https://manhua.fzdm.com/39/001/"})
+    assert state == :ok
+    assert length(result.plist) == 52
+  end
 
   test "index" do
     {state, result} = index("")

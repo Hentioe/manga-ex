@@ -7,11 +7,11 @@ end
 defmodule Manga.Res.Stage do
   @default_name "第0话"
   @default_url "scheme://domain/path"
-  defstruct name: @default_name, url: @default_url, plist: [%Manga.Res.Page{}]
+  defstruct name: @default_name, url: @default_url, plist: []
 end
 
 defmodule Manga.Res.Info do
   @default_name "Default manga name"
   @default_url "scheme://domain/path"
-  defstruct name: @default_name, url: @default_url, stage_list: [%Manga.Res.Stage{}]
+  defstruct name: @default_name, url: @default_url, stage_list: []
 end

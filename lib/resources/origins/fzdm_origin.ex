@@ -66,13 +66,13 @@ defmodule Manga.Res.FZDMOrigin do
           }
         end)
 
-      {:ok, list}
+      {:ok, %{info | stage_list: list}}
     else
       {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
     end
   end
 
-  def fetch(stage, list \\ [], n \\ 0) do
+  def fetch(stage, n \\ 0) do
     resp = HC.get(stage.url <> "index_#{n}.html")
 
     if HCR.success?(resp) do
@@ -85,10 +85,11 @@ defmodule Manga.Res.FZDMOrigin do
         |> List.first()
         |> List.last()
 
-      fetch(stage, list ++ [%Page{p: n + 1, url: @url_prefix <> url}], n + 1)
+      stage = %{stage | plist: stage.plist ++ [%Page{p: n + 1, url: @url_prefix <> url}]}
+      fetch(stage, n + 1)
     else
       if(HCR.status_code?(resp, 500)) do
-        {:ok, list}
+        {:ok, stage}
       else
         {:error, resp |> HCR.error_msg("Fetch:#{stage.name}")}
       end
