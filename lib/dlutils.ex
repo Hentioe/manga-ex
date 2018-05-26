@@ -33,7 +33,7 @@ defmodule Manga.DLUtils do
 
     mkdir_not_exists(dir_name)
 
-    IO.puts("\n[Extracting] #{stage.name}")
+    IO.puts("[Extracting] #{stage.name}")
 
     rlist =
       stage.plist

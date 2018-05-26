@@ -8,8 +8,8 @@ defmodule Manga.Res.EpubExportTest do
     # 拉取资源
     {state, r} =
       fetch(%Manga.Res.Stage{
-        name: "海贼王905话",
-        url: "https://manhua.fzdm.com/2/905/"
+        name: "灵能百分百101话",
+        url: "https://manhua.fzdm.com/49/101/"
       })
 
     send(self(), state)
@@ -17,7 +17,7 @@ defmodule Manga.Res.EpubExportTest do
     # 下载资源
     DLUtils.from_stage(r)
     # 合并资源
-    {state, r} = save_from_stage(r)
+    {state, _} = save_from_stage(r)
     assert state == :ok
   end
 end
