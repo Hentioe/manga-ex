@@ -1,5 +1,6 @@
 defmodule Manga.Res.FZDMOrigin do
   @behaviour Manga.Res.Origin
+  import Manga.PrintUtils
   alias Manga.Res.Info
   alias Manga.Res.Stage
   alias Manga.Res.Page
@@ -74,6 +75,7 @@ defmodule Manga.Res.FZDMOrigin do
 
   def fetch(stage, n \\ 0) do
     resp = HC.get(stage.url <> "index_#{n}.html")
+    print_info("[Fetching] #{stage.url <> "index_#{n}.html"}")
 
     if HCR.success?(resp) do
       html =
@@ -81,12 +83,33 @@ defmodule Manga.Res.FZDMOrigin do
         |> HCR.body()
 
       url =
-        Regex.scan(@url_regex, html)
-        |> List.first()
-        |> List.last()
+        case Regex.scan(@url_regex, html) do
+          [] ->
+            nil
 
-      stage = %{stage | plist: stage.plist ++ [%Page{p: n + 1, url: @url_prefix <> url}]}
-      fetch(stage, n + 1)
+          [r] ->
+            List.last(r)
+        end
+
+      # 设置 stage.name
+      stage =
+        case stage.name do
+          :none ->
+            Regex.scan(~r/<meta property=\"og:title\" content=\"([^\"]+)\">/i, html)
+            |> List.first()
+            |> List.last()
+            |> (&%{stage | name: &1}).()
+
+          _ ->
+            stage
+        end
+
+      if url != nil do
+        stage = %{stage | plist: stage.plist ++ [%Page{p: n + 1, url: @url_prefix <> url}]}
+        fetch(stage, n + 1)
+      else
+        {:ok, stage}
+      end
     else
       if(HCR.status_code?(resp, 500)) do
         {:ok, stage}

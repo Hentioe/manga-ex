@@ -44,20 +44,8 @@ defmodule Manga do
         end
 
       # 漫画页（某一话）
-      url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/\d+\//i) ->
-        stages_url =
-          Regex.scan(~r/https:\/\/manhua.fzdm.com\/\d+\//i, url)
-          |> List.first()
-          |> List.first()
-
-        with {:ok, manga_info} <- Manga.Res.FZDMOrigin.stages(%Manga.Res.Info{url: stages_url}),
-             {:ok, stage} <-
-               manga_info.stage_list
-               |> Enum.filter(fn stage ->
-                 stage.url == url
-               end)
-               |> List.first()
-               |> Manga.Res.FZDMOrigin.fetch(),
+      url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/[^\/]+\//i) ->
+        with {:ok, stage} <- Manga.Res.FZDMOrigin.fetch(%Manga.Res.Stage{url: url}),
              {:ok, _} <- Manga.DLUtils.from_stage(stage),
              {:ok, path} <- Manga.Res.EpubExport.save_from_stage(stage) do
           # 输出结果
