@@ -1,4 +1,6 @@
 defmodule Manga do
+  import Manga.PrintUtils
+
   @moduledoc """
   Documentation for Manga.
   """
@@ -18,10 +20,10 @@ defmodule Manga do
 
   def main(argv \\ []) do
     if(length(argv) == 0) do
-      IO.puts("Arguments Error, Please input the resource URL")
+      print_error("Arguments Error, Please input the resource URL")
+    else
+      argv |> List.first() |> export()
     end
-
-    argv |> List.first() |> export()
   end
 
   defp export(url) do
@@ -34,11 +36,11 @@ defmodule Manga do
             |> Enum.reverse()
             |> Enum.with_index()
             |> Enum.each(fn {v, i} ->
-              IO.puts("[#{i}] #{v.name}")
+              print_result("[#{i}] #{v.name}")
             end)
 
-          {:error, msg} ->
-            IO.puts(msg)
+          {:error, error} ->
+            print_error(error)
         end
 
       # 漫画页（某一话）
@@ -48,41 +50,25 @@ defmodule Manga do
           |> List.first()
           |> List.first()
 
-        case Manga.Res.FZDMOrigin.stages(%Manga.Res.Info{url: stages_url}) do
-          {:ok, manga_info} ->
-            case manga_info.stage_list
-                 |> Enum.filter(fn stage ->
-                   stage.url == url
-                 end)
-                 |> List.first()
-                 |> Manga.Res.FZDMOrigin.fetch() do
-              {:ok, stage} ->
-                # 下载资源
-                case Manga.DLUtils.from_stage(stage) do
-                  {:ok, _} ->
-                    # 合并资源
-                    case Manga.Res.EpubExport.save_from_stage(stage) do
-                      {:ok, path} ->
-                        IO.puts("[Saved] #{path}")
-
-                      {:error, msg} ->
-                        IO.inspect(msg)
-                    end
-
-                  {:error, msg} ->
-                    IO.puts(msg)
-                end
-
-              {:error, msg} ->
-                IO.puts(msg)
-            end
-
-          {:error, msg} ->
-            IO.puts(msg)
+        with {:ok, manga_info} <- Manga.Res.FZDMOrigin.stages(%Manga.Res.Info{url: stages_url}),
+             {:ok, stage} <-
+               manga_info.stage_list
+               |> Enum.filter(fn stage ->
+                 stage.url == url
+               end)
+               |> List.first()
+               |> Manga.Res.FZDMOrigin.fetch(),
+             {:ok, _} <- Manga.DLUtils.from_stage(stage),
+             {:ok, path} <- Manga.Res.EpubExport.save_from_stage(stage) do
+          # 输出结果
+          print_result("[Saved] #{path}")
+        else
+          {:error, error} ->
+            print_error(error)
         end
 
       true ->
-        IO.puts("Unknown platform url")
+        print_error("Unknown platform url")
     end
   end
 

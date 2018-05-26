@@ -1,17 +1,17 @@
 defmodule Manga.Res.Page do
-  @default_page 1
-  @default_url "scheme://domain/path"
+  @default_page :none
+  @default_url :none
   defstruct p: @default_page, url: @default_url
 end
 
 defmodule Manga.Res.Stage do
-  @default_name "第0话"
-  @default_url "scheme://domain/path"
+  @default_name :none
+  @default_url :none
   defstruct name: @default_name, url: @default_url, plist: []
 end
 
 defmodule Manga.Res.Info do
-  @default_name "Default manga name"
-  @default_url "scheme://domain/path"
+  @default_name :none
+  @default_url :none
   defstruct name: @default_name, url: @default_url, stage_list: []
 end

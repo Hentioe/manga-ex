@@ -1,5 +1,6 @@
 defmodule Manga.DLUtils do
   import Manga.IOUtils
+  import Manga.PrintUtils
 
   @base_path "./_res"
   @assets_path "#{@base_path}/assets"
@@ -20,7 +21,7 @@ defmodule Manga.DLUtils do
 
     case from(page.url, path: "#{dir_name}/#{page.p}.jpg") do
       {:ok, path} ->
-        IO.puts("[Saved] #{path}")
+        print_info("[Saved] #{path}")
         {:ok, path}
 
       {:error, _} ->
@@ -33,12 +34,12 @@ defmodule Manga.DLUtils do
 
     mkdir_not_exists(dir_name)
 
-    IO.puts("[Extracting] #{stage.name}")
+    print_info("[Extracting] #{stage.name}")
 
     rlist =
       stage.plist
       |> Enum.map(fn page ->
-        IO.puts("[Downloading] #{stage.name}-#{page.p}P")
+        print_info("[Downloading] #{stage.name}-#{page.p}P")
         stage |> from_page(page)
       end)
 
