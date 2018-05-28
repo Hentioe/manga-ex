@@ -1,11 +1,11 @@
 defmodule Manga.Res.Origin do
-  @callback index(String.t()) :: {:ok, [Manga.Res.Info.t()]} | {:error, String.t()}
-  @callback search(String.t()) :: {:ok, [Manga.Res.Info.t()]} | {:error, String.t()}
-  @callback stages(Manga.Res.Info.t()) :: {:ok, Manga.Res.Info.t()} | {:error, String.t()}
-  @callback fetch(Manga.Res.Stage.t()) :: {:ok, Manga.Res.Stage.t()} | {:error, String.t()}
+  @callback index(String.t()) :: {:ok, [Manga.Model.Info.t()]} | {:error, String.t()}
+  @callback search(String.t()) :: {:ok, [Manga.Model.Info.t()]} | {:error, String.t()}
+  @callback stages(Manga.Model.Info.t()) :: {:ok, Manga.Model.Info.t()} | {:error, String.t()}
+  @callback fetch(Manga.Model.Stage.t()) :: {:ok, Manga.Model.Stage.t()} | {:error, String.t()}
 
-  @spec fetchall(Manga.Res.Origin, Manga.Res.Info.t()) ::
-          {:ok, [Manga.Res.Info.t()]} | {:error, String.t()}
+  @spec fetchall(Manga.Res.Origin, Manga.Model.Info.t()) ::
+          {:ok, [Manga.Model.Info.t()]} | {:error, String.t()}
   def fetchall(implementation, manga_info) do
     case implementation.stages(manga_info) do
       {:ok, list} ->

@@ -20,7 +20,7 @@ defmodule Manga do
 
   def main(argv \\ []) do
     if(length(argv) == 0) do
-      print_error("Arguments Error, Please input the resource URL")
+      print_error("Arguments error: Please input the resource url")
     else
       argv |> List.first() |> export()
     end
@@ -30,7 +30,7 @@ defmodule Manga do
     cond do
       # 漫画主页（话/卷列表）
       url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/$/i) ->
-        case Manga.Res.FZDMOrigin.stages(%Manga.Res.Info{url: url}) do
+        case Manga.Res.FZDMOrigin.stages(%Manga.Model.Info{url: url}) do
           {:ok, manga_info} ->
             manga_info.stage_list
             |> Enum.reverse()
@@ -45,7 +45,7 @@ defmodule Manga do
 
       # 漫画页（某一话）
       url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/[^\/]+\//i) ->
-        with {:ok, stage} <- Manga.Res.FZDMOrigin.fetch(%Manga.Res.Stage{url: url}),
+        with {:ok, stage} <- Manga.Res.FZDMOrigin.fetch(%Manga.Model.Stage{url: url}),
              {:ok, _} <- Manga.DLUtils.from_stage(stage),
              {:ok, path} <- Manga.Res.EpubExport.save_from_stage(stage) do
           # 输出结果

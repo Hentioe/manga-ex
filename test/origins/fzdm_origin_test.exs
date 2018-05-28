@@ -1,6 +1,8 @@
 defmodule Manga.Res.FZDMOriginTest do
   use ExUnit.Case
   import Manga.Res.FZDMOrigin
+  alias Manga.Model.Info
+  alias Manga.Model.Stage
 
   test "search" do
     {state, result} = search("进击的巨人")
@@ -10,14 +12,14 @@ defmodule Manga.Res.FZDMOriginTest do
   end
 
   test "stages" do
-    {state, result} = stages(%Manga.Res.Info{url: "https://manhua.fzdm.com/39/"})
+    {state, result} = stages(Info.create(url: "https://manhua.fzdm.com/39/"))
     assert state == :ok
     assert is_list(result.stage_list)
     assert length(result.stage_list) > 0
   end
 
   test "fetch" do
-    {state, result} = fetch(%Manga.Res.Stage{url: "https://manhua.fzdm.com/39/001/"})
+    {state, result} = fetch(Stage.create(url: "https://manhua.fzdm.com/39/001/"))
     assert state == :ok
     assert length(result.plist) == 52
   end

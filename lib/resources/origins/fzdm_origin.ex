@@ -1,9 +1,9 @@
 defmodule Manga.Res.FZDMOrigin do
   @behaviour Manga.Res.Origin
   import Manga.PrintUtils
-  alias Manga.Res.Info
-  alias Manga.Res.Stage
-  alias Manga.Res.Page
+  alias Manga.Model.Info
+  alias Manga.Model.Stage
+  alias Manga.Model.Page
   alias Manga.HTTPClient, as: HC
   alias Manga.HTTPClient.Response, as: HCR
   @url_prefix "http://p0.xiaoshidi.net/"
@@ -25,11 +25,11 @@ defmodule Manga.Res.FZDMOrigin do
         |> Enum.filter(fn {_, i} -> rem(i, 2) != 0 end)
         |> Enum.map(fn {linkNode, _} -> linkNode end)
         |> Enum.map(fn linkNode ->
-          %Info{
+          Info.create(
             name: linkNode |> Floki.attribute("title") |> List.first(),
             url:
               "https://manhua.fzdm.com/" <> (linkNode |> Floki.attribute("href") |> List.first())
-          }
+          )
         end)
 
       {:ok, list}
@@ -61,13 +61,13 @@ defmodule Manga.Res.FZDMOrigin do
         |> HCR.body()
         |> Floki.find("li.pure-u-1-2.pure-u-lg-1-4 > a")
         |> Enum.map(fn linkNode ->
-          %Stage{
+          Stage.create(
             name: Floki.text(linkNode),
             url: info.url <> (linkNode |> Floki.attribute("href") |> List.first())
-          }
+          )
         end)
 
-      {:ok, %{info | stage_list: list}}
+      {:ok, info |> Info.update_stage_list(list)}
     else
       {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
     end
@@ -94,18 +94,18 @@ defmodule Manga.Res.FZDMOrigin do
       # 设置 stage.name
       stage =
         case stage.name do
-          :none ->
+          nil ->
             Regex.scan(~r/<meta property=\"og:title\" content=\"([^\"]+)\">/i, html)
             |> List.first()
             |> List.last()
-            |> (&%{stage | name: &1}).()
+            |> (&Stage.rename(stage, &1)).()
 
           _ ->
             stage
         end
 
       if url != nil do
-        stage = %{stage | plist: stage.plist ++ [%Page{p: n + 1, url: @url_prefix <> url}]}
+        stage = stage |> Stage.add_page(Page.create(p: n + 1, url: @url_prefix <> url))
         fetch(stage, n + 1)
       else
         {:ok, stage}

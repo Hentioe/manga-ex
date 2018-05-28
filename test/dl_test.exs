@@ -2,9 +2,10 @@ defmodule Manga.DLUtilsTest do
   use ExUnit.Case
   import Manga.DLUtils
   import Manga.Res.FZDMOrigin
+  alias Manga.Model.Info
 
   test "from_stage" do
-    {state, info} = stages(%Manga.Res.Info{url: "https://manhua.fzdm.com/2/"})
+    {state, info} = stages(Info.create(url: "https://manhua.fzdm.com/2/"))
     assert state == :ok
     assert length(info.stage_list) > 0
 

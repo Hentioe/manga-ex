@@ -2,15 +2,17 @@ defmodule Manga.Res.EpubExportTest do
   use ExUnit.Case
   import Manga.Res.EpubExport
   alias Manga.DLUtils
+  alias Manga.Model.Stage
   import Manga.Res.FZDMOrigin
 
   test "save_from_stage" do
     # 拉取资源
     {state, r} =
-      fetch(%Manga.Res.Stage{
+      Stage.create(
         name: "灵能百分百101话",
         url: "https://manhua.fzdm.com/49/101/"
-      })
+      )
+      |> fetch
 
     send(self(), state)
     assert_received :ok, r
