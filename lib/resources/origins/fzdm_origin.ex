@@ -1,11 +1,11 @@
 defmodule Manga.Res.FZDMOrigin do
   @behaviour Manga.Res.Origin
-  import Manga.PrintUtils
+  import Manga.Utils.Printer
   alias Manga.Model.Info
   alias Manga.Model.Stage
   alias Manga.Model.Page
-  alias Manga.HTTPClient, as: HC
-  alias Manga.HTTPClient.Response, as: HCR
+  alias Manga.Utils.HTTPClient, as: HC
+  alias Manga.Utils.HTTPClient.Response, as: HCR
   @url_prefix "http://p0.xiaoshidi.net/"
   @url_regex ~r/mhurl="([^"]+)"/
 

@@ -1,5 +1,5 @@
 defmodule Manga do
-  import Manga.PrintUtils
+  import Manga.Utils.Printer
 
   @moduledoc """
   Documentation for Manga.
@@ -20,7 +20,7 @@ defmodule Manga do
 
   def main(argv \\ []) do
     if(length(argv) == 0) do
-      print_error("Arguments error: Please input the resource url")
+      print_error("ArgumentsError: Please input the resource url")
     else
       argv |> List.first() |> export()
     end
@@ -46,7 +46,7 @@ defmodule Manga do
       # 漫画页（某一话）
       url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/[^\/]+\//i) ->
         with {:ok, stage} <- Manga.Res.FZDMOrigin.fetch(%Manga.Model.Stage{url: url}),
-             {:ok, _} <- Manga.DLUtils.from_stage(stage),
+             {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
              {:ok, path} <- Manga.Res.EpubExport.save_from_stage(stage) do
           # 输出结果
           print_result("[Saved] #{path}")

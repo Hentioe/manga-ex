@@ -1,8 +1,8 @@
-defmodule Manga.HTTPClientTest do
+defmodule Manga.Utils.HTTPClientTest do
   use ExUnit.Case
 
-  import Manga.HTTPClient
-  alias Manga.HTTPClient.Response, as: HPR
+  import Manga.Utils.HTTPClient
+  alias Manga.Utils.HTTPClient.Response, as: HPR
 
   test "test http get" do
     assert get("https://www.fzdm.com/")

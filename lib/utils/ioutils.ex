@@ -1,4 +1,4 @@
-defmodule Manga.IOUtils do
+defmodule Manga.Utils.IOUtils do
   def mkdir_not_exists(path_list) when is_list(path_list) do
     Enum.each(path_list, fn path ->
       if !File.exists?(path) do

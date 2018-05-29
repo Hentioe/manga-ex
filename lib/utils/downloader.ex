@@ -1,6 +1,6 @@
-defmodule Manga.DLUtils do
-  import Manga.IOUtils
-  import Manga.PrintUtils
+defmodule Manga.Utils.Downloader do
+  import Manga.Utils.IOUtils
+  import Manga.Utils.Printer
 
   @base_path "./_res"
   @assets_path "#{@base_path}/assets"

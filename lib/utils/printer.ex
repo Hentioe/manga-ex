@@ -1,4 +1,4 @@
-defmodule Manga.PrintUtils do
+defmodule Manga.Utils.Printer do
   def print_info(text) do
     "#{IO.ANSI.color(8)}#{text}" |> IO.puts()
   end

@@ -1,4 +1,4 @@
-defmodule Manga.Res.Epub.Tpl do
+defmodule Manga.Res.EpubTpl do
   def img_xhtml(img_src, title \\ "", alt \\ "") do
     '
     <?xml version=\'1.0\' encoding=\'utf-8\'?>

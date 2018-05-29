@@ -1,6 +1,6 @@
 defmodule Manga.Res.EpubExport do
-  import Manga.IOUtils
-  import Manga.Res.Epub.Tpl
+  import Manga.Utils.IOUtils
+  import Manga.Res.EpubTpl
   @behaviour Manga.Res.Export
 
   def save_from_stage(stage) do

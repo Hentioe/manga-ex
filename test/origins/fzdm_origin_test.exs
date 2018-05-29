@@ -19,9 +19,10 @@ defmodule Manga.Res.FZDMOriginTest do
   end
 
   test "fetch" do
-    {state, result} = fetch(Stage.create(url: "https://manhua.fzdm.com/39/001/"))
-    assert state == :ok
-    assert length(result.plist) == 52
+    {state, result} = fetch(Stage.create(url: "https://manhua.fzdm.com/2/905/"))
+    send(self(), state)
+    assert_received :ok, result
+    assert length(result.plist) == 16
   end
 
   test "index" do
