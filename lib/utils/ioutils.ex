@@ -10,4 +10,8 @@ defmodule Manga.Utils.IOUtils do
   def mkdir_not_exists(path) do
     mkdir_not_exists([path])
   end
+
+  def gets(text) do
+    IO.gets "#{IO.ANSI.color(255)}#{text}"
+  end
 end
