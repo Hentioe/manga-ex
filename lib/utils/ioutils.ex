@@ -12,6 +12,12 @@ defmodule Manga.Utils.IOUtils do
   end
 
   def gets(text) do
-    IO.gets "#{IO.ANSI.color(255)}#{text}"
+    IO.gets("#{IO.ANSI.color(255)}#{text}")
+  end
+
+  def gets_number(text) do
+    gets(text)
+    |> String.trim()
+    |> Integer.parse()
   end
 end

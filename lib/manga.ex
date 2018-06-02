@@ -29,10 +29,10 @@ defmodule Manga do
   ]
 
   def main(args \\ []) do
-    # 如果没有参数则进入交互模式
-    print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
-
     if(length(args) == 0) do
+      # 如果没有参数则进入交互模式
+      print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
+
       @platforms
       |> Enum.with_index()
       |> Enum.each(fn {platform, i} ->
@@ -60,12 +60,8 @@ defmodule Manga do
           print_result("[#{i + 1}]: #{manga_info.name}")
         end)
 
-        {n, _} =
-          IOUtils.gets("\nPlease select a platform, [Number]: ")
-          |> String.trim()
-          |> Integer.parse()
-
-        IO.inspect(Enum.at(list, n - 1))
+        {n, _} = IOUtils.gets_number("\nPlease select a manga, [Number]: ")
+        Enum.at(list, n - 1).url |> export()
 
       {:error, error} ->
         print_error(error)
@@ -78,12 +74,17 @@ defmodule Manga do
       url |> platform?(~r/https:\/\/manhua.fzdm.com\/\d+\/$/i) ->
         case Manga.Res.FZDMOrigin.stages(%Manga.Model.Info{url: url}) do
           {:ok, manga_info} ->
-            manga_info.stage_list
-            |> Enum.reverse()
+            list = manga_info.stage_list |> Enum.reverse()
+
+            list
             |> Enum.with_index()
-            |> Enum.each(fn {v, i} ->
-              print_result("[#{i}] #{v.name}")
+            |> Enum.each(fn {stage, i} ->
+              print_result("[#{i}]: #{stage.name}")
             end)
+
+            {n, _} = IOUtils.gets_number("\nPlease select a stage, [Number]: ")
+
+            Enum.at(list, n).url |> export()
 
           {:error, error} ->
             print_error(error)
