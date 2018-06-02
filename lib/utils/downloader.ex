@@ -24,8 +24,8 @@ defmodule Manga.Utils.Downloader do
         print_info("[Saved] #{path}")
         {:ok, path}
 
-      {:error, _} ->
-        {:error, page.url}
+      error ->
+        error
     end
   end
 

@@ -6,8 +6,16 @@ defmodule Manga.Model.Info do
     %__MODULE__{name: props[:name], url: props[:url], stage_list: stage_list}
   end
 
+  def rename(info, name) when is_binary(name) do
+    %{info | name: name}
+  end
+
   def update_stage_list(info, stage_list) when is_list(stage_list) do
     %{info | stage_list: stage_list}
+  end
+
+  def reverse_stage_list(info) do
+    %{info | stage_list: info.stage_list |> Enum.reverse()}
   end
 
   def add_stage_list(info, stage_list) when is_list(stage_list) do

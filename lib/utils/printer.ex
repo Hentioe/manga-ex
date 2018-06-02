@@ -14,4 +14,8 @@ defmodule Manga.Utils.Printer do
   def print_normal(text) do
     "#{IO.ANSI.white()}#{text}" |> IO.puts()
   end
+
+  def newline do
+    "\n" |> (&IO.write(:stdio, &1)).()
+  end
 end

@@ -4,6 +4,7 @@ defmodule Manga.Utils.HTTPClient do
   @default_user_agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
 
   @default_options [
+    follow_redirects: true,
     timeout: 10 * 1500,
     headers: [
       "User-Agent": @default_user_agent

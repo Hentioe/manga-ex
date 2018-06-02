@@ -7,6 +7,84 @@ defmodule Manga.Res.DMZJOrigin do
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
 
+  def index(props \\ nil) do
+    {url, _page} =
+      case props do
+        nil -> {"https://manhua.dmzj.com/rank/", 1}
+      end
+
+    resp = HC.get(url)
+
+    if HCR.success?(resp) do
+      list =
+        resp
+        |> HCR.body()
+        |> Floki.find(".middlerighter span.title > a")
+        |> Enum.map(fn linkNode ->
+          Info.create(
+            name: linkNode |> Floki.text(),
+            url: linkNode |> Floki.attribute("href") |> List.first()
+          )
+        end)
+
+      {:ok, list}
+    else
+      {:error, resp |> HCR.error_msg("Index:DMZJ")}
+    end
+  end
+
+  def search(_words) do
+    {:ok, []}
+    # url = "https://manhua.dmzj.com/tags/search.shtml?s=#{URI.encode(words)}"
+    # resp = HC.get(url)
+
+    # if HCR.success?(resp) do
+    #   list =
+    #     resp
+    #     |> HCR.body()
+    #     |> IO.puts()
+    #     |> Floki.find(".tcaricature_new .tcaricature_block.tcaricature_block2 > ul > li > a")
+    #     |> Enum.map(fn linkNode ->
+    #       Info.create(
+    #         name: linkNode |> Floki.text(),
+    #         url: "https:" <> (linkNode |> Floki.attribute("href") |> List.first())
+    #       )
+    #     end)
+
+    #   {:ok, list}
+    # else
+    #   {:error, resp |> HCR.error_msg("Search:DMZJ")}
+    # end
+  end
+
+  def stages(info) do
+    resp = HC.get(info.url)
+
+    if HCR.success?(resp) do
+      html = resp |> HCR.body()
+
+      list =
+        html
+        |> Floki.find(".cartoon_online_border > ul > li > a")
+        |> Enum.map(fn linkNode ->
+          Stage.create(
+            name: Floki.text(linkNode),
+            url: "https://manhua.dmzj.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+          )
+        end)
+
+      get_name = fn -> html |> Floki.find(".anim_title_text > a > h1") |> Floki.text() end
+
+      info =
+        Info.update_stage_list(info, list)
+        |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
+
+      {:ok, info}
+    else
+      {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
+    end
+  end
+
   def fetch(stage) do
     resp = HC.get(stage.url)
     print_info("[Fetching] #{stage.url}")

@@ -47,8 +47,8 @@ defmodule Manga.Res.FZDMOrigin do
 
         {:ok, list}
 
-      {:error, error} ->
-        {:error, error}
+      error ->
+        error
     end
   end
 
@@ -67,7 +67,7 @@ defmodule Manga.Res.FZDMOrigin do
           )
         end)
 
-      {:ok, info |> Info.update_stage_list(list)}
+      {:ok, info |> Info.update_stage_list(list) |> Info.reverse_stage_list()}
     else
       {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
     end
