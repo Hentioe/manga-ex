@@ -19,7 +19,12 @@ defmodule Manga.Utils.Downloader do
     dir_name = "#{@assets_path}/#{stage.name}"
     mkdir_not_exists(dir_name)
 
-    case from(page.url, path: "#{dir_name}/#{page.p}.jpg") do
+    case from(
+           page.url,
+           path: "#{dir_name}/#{page.p}.jpg",
+           headers: page.http_headers,
+           options: page.http_options
+         ) do
       {:ok, path} ->
         print_info("[Saved] #{path}")
         {:ok, path}

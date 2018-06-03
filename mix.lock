@@ -1,6 +1,6 @@
 %{
   "certifi": {:hex, :certifi, "2.3.1", "d0f424232390bf47d82da8478022301c561cf6445b5b5fb6a84d49a9e76d2639", [:rebar3], [{:parse_trans, "3.2.0", [hex: :parse_trans, repo: "hexpm", optional: false]}], "hexpm"},
-  "download": {:hex, :download, "0.0.4", "e031589ef0503005468962de6fdbc2ac7ddeba4671b3093c619e091f4055e45d", [:mix], [{:httpoison, ">= 0.9.0", [hex: :httpoison, repo: "hexpm", optional: false]}], "hexpm"},
+  "download": {:git, "https://github.com/Hentioe/download.ex.git", "f1ad62bbacd039ddcb0f5277f86b495ef97b60e0", [tag: "0.0.5"]},
   "floki": {:hex, :floki, "0.20.2", "8828562cf23dafc5887c54779369fe08eb32121ff87bf98fb154c7a2d8316679", [:mix], [{:html_entities, "~> 0.4.0", [hex: :html_entities, repo: "hexpm", optional: false]}, {:mochiweb, "~> 2.15", [hex: :mochiweb, repo: "hexpm", optional: false]}], "hexpm"},
   "hackney": {:hex, :hackney, "1.12.1", "8bf2d0e11e722e533903fe126e14d6e7e94d9b7983ced595b75f532e04b7fdc7", [:rebar3], [{:certifi, "2.3.1", [hex: :certifi, repo: "hexpm", optional: false]}, {:idna, "5.1.1", [hex: :idna, repo: "hexpm", optional: false]}, {:metrics, "1.0.1", [hex: :metrics, repo: "hexpm", optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, repo: "hexpm", optional: false]}, {:ssl_verify_fun, "1.1.1", [hex: :ssl_verify_fun, repo: "hexpm", optional: false]}], "hexpm"},
   "html_entities": {:hex, :html_entities, "0.4.0", "f2fee876858cf6aaa9db608820a3209e45a087c5177332799592142b50e89a6b", [:mix], [], "hexpm"},

@@ -85,6 +85,13 @@ defmodule Manga.Res.DMZJOrigin do
     end
   end
 
+  @page_http_headers %{
+    "user-agent" =>
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36",
+    "referer" => "https://manhua.dmzj.com"
+  }
+  @page_http_options [ssl: [{:versions, [:"tlsv1.2"]}]]
+
   def fetch(stage) do
     resp = HC.get(stage.url)
     print_info("[Fetching] #{stage.url}")
@@ -113,7 +120,12 @@ defmodule Manga.Res.DMZJOrigin do
             data[:pages]
             |> Enum.with_index()
             |> Enum.map(fn {path, i} ->
-              Page.create(p: i + 1, url: "https://images.dmzj.com/" <> path)
+              Page.create(
+                p: i + 1,
+                url: "https://images.dmzj.com/" <> path,
+                http_headers: @page_http_headers,
+                http_options: @page_http_options
+              )
             end)
 
           stage =
