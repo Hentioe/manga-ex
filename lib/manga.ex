@@ -120,24 +120,35 @@ defmodule Manga do
     end
   end
 
+  @url_mapping [
+    [
+      pattern: ~r/https?:\/\/manhua\.fzdm\.com\/\d+\/$/i,
+      type: {:stages, :fzdm}
+    ],
+    [
+      pattern: ~r/https?:\/\/manhua\.fzdm\.com\/\d+\/[^\/]+\//i,
+      type: {:fetch, :fzdm}
+    ],
+    [
+      pattern: ~r/https?:\/\/manhua\.dmzj\.com\/[^\/]+\/?$/i,
+      type: {:stages, :dmzj}
+    ],
+    [
+      pattern: ~r/https?:\/\/manhua\.dmzj\.com\/[^\/]+\/\d+\.shtml/i,
+      type: {:fetch, :dmzj}
+    ]
+  ]
+
   defp platform?(url) do
     is_match = fn pattern -> Regex.match?(pattern, url) end
 
-    cond do
-      is_match.(~r/https:\/\/manhua.fzdm.com\/\d+\/$/i) ->
-        {:stages, :fzdm}
-
-      is_match.(~r/https:\/\/manhua.fzdm.com\/\d+\/[^\/]+\//i) ->
-        {:fetch, :fzdm}
-
-      is_match.(~r/https?:\/\/manhua.dmzj.com\/[^\/]+\/?$/i) ->
-        {:stages, :dmzj}
-
-      is_match.(~r/https:\/\/manhua.dmzj.com\/[^\/]+\/\d+\.shtml/i) ->
-        {:fetch, :dmzj}
-
-      true ->
-        {:error, "Unknown platform url"}
-    end
+    @url_mapping
+    |> Enum.filter(fn mapping ->
+      is_match.(mapping[:pattern])
+    end)
+    |> List.first()
+    |> (fn mapping ->
+          if mapping == nil, do: {:error, "Unknown platform url"}, else: mapping[:type]
+        end).()
   end
 end
