@@ -41,8 +41,8 @@ defmodule Manga do
   def main(args \\ []) do
     switches = [
       version: :boolean,
-      ft: :integer,
-      dt: :integer
+      td: :integer,
+      dd: :integer
     ]
 
     parsed = OptionParser.parse(args, switches: switches)
@@ -57,8 +57,8 @@ defmodule Manga do
         print_normal("Manga.ex #{@version}")
 
       {props, unknowns, _} ->
-        Props.set_ft(props[:ft])
-        Props.set_dt(props[:dt])
+        Props.set_fd(props[:td])
+        Props.set_dd(props[:dd])
 
         if length(unknowns) > 0 do
           url =
