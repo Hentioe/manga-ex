@@ -1,5 +1,7 @@
 defmodule Manga do
   import Manga.Utils.Printer
+  import Manga.Utils.ProgressBar
+  alias Manga.Utils.Props
 
   @moduledoc """
   Documentation for Manga.
@@ -21,7 +23,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha5-0"
+  @version "alpha7-0"
 
   @platforms [
     dmzj:
@@ -37,41 +39,62 @@ defmodule Manga do
   ]
 
   def main(args \\ []) do
-    if(length(args) == 0) do
-      # 如果没有参数则进入交互模式
-      print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
+    switches = [
+      version: :boolean,
+      ft: :integer,
+      dt: :integer
+    ]
 
-      list =
-        @platforms
-        |> Enum.map(fn {_, platform} -> platform end)
-        |> Enum.with_index()
-        |> Enum.map(fn {platform, i} ->
-          print_result("[#{i + 1}]: #{platform.name}")
-          platform
-        end)
+    parsed = OptionParser.parse(args, switches: switches)
+    # IO.inspect(parsed)
 
-      {n, _} =
-        IOUtils.gets("\nPlease select a platform, [Number]: ")
-        |> String.trim()
-        |> Integer.parse()
+    case parsed do
+      {_, ["cleancache"], _} ->
+        File.rm_rf("./_res/.cache")
 
-      Enum.at(list, n - 1) |> index
-    else
-      parsed = OptionParser.parse(args)
-      # IO.inspect(parsed)
+      {[version: true], _, _} ->
+        print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
+        print_normal("Manga.ex #{@version}")
 
-      case parsed do
-        {_, ["cleancache"], _} ->
-          File.rm_rf("./_res/.cache")
+      {props, unknowns, _} ->
+        Props.set_ft(props[:ft])
+        Props.set_dt(props[:dt])
 
-        {[version: true], _, _} ->
-          print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
-          print_normal("Manga.ex #{@version}")
+        if length(unknowns) > 0 do
+          url =
+            unknowns
+            |> List.first()
 
-        _ ->
-          args |> List.first() |> export()
-      end
+          action(:intellig, url: url)
+        else
+          action(:default)
+        end
     end
+  end
+
+  def action(:default) do
+    # 交互模式
+    print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
+
+    list =
+      @platforms
+      |> Enum.map(fn {_, platform} -> platform end)
+      |> Enum.with_index()
+      |> Enum.map(fn {platform, i} ->
+        print_result("[#{i + 1}]: #{platform.name}")
+        platform
+      end)
+
+    {n, _} =
+      IOUtils.gets("\nPlease select a platform, [Number]: ")
+      |> String.trim()
+      |> Integer.parse()
+
+    Enum.at(list, n - 1) |> index
+  end
+
+  def action(:intellig, url: url) do
+    export(url)
   end
 
   defp index(p) do
@@ -121,9 +144,14 @@ defmodule Manga do
       {:fetch, key} ->
         with {:ok, stage} <- @platforms[key].origin.fetch(Stage.create(url: url)),
              {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
-             {:ok, path} <- Manga.Res.EpubExport.save_from_stage(stage) do
+             {:ok, _} <-
+               (fn ->
+                  render_export(stage.name, 1, 2)
+                  r = Manga.Res.EpubExport.save_from_stage(stage)
+                  render_export(stage.name, 2, 2)
+                  r
+                end).() do
           # 输出结果
-          print_result("[Saved] #{path}")
         else
           {:error, error} ->
             print_error(error)
@@ -169,5 +197,9 @@ defmodule Manga do
   defp get_system_info do
     {family, name} = :os.type()
     "#{Atom.to_string(family)}/#{Atom.to_string(name)}"
+  end
+
+  def start(_type, _args) do
+    Manga.Utils.Props.start_link(%{})
   end
 end

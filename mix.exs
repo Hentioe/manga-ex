@@ -19,6 +19,7 @@ defmodule Manga.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Manga, []},
       extra_applications: [:logger, :eex]
     ]
   end
@@ -31,7 +32,8 @@ defmodule Manga.MixProject do
       {:httpotion, "~> 3.1"},
       {:floki, "~> 0.20.2"},
       {:download, git: "https://github.com/Hentioe/download.ex.git", tag: "0.0.5"},
-      {:uuid, "~> 1.1"}
+      {:uuid, "~> 1.1"},
+      {:progress_bar, "~> 1.6"}
     ]
   end
 end
