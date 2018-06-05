@@ -21,6 +21,8 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
+  @version "alpha5-0"
+
   @platforms [
     dmzj:
       Platform.create(
@@ -55,8 +57,20 @@ defmodule Manga do
 
       Enum.at(list, n - 1) |> index
     else
-      _parsed = OptionParser.parse(args)
-      args |> List.first() |> export()
+      parsed = OptionParser.parse(args)
+      # IO.inspect(parsed)
+
+      case parsed do
+        {_, ["cleancache"], _} ->
+          File.rm_rf("./_res/.cache")
+
+        {[version: true], _, _} ->
+          print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
+          print_normal("Manga.ex #{@version}")
+
+        _ ->
+          args |> List.first() |> export()
+      end
     end
   end
 
@@ -150,5 +164,10 @@ defmodule Manga do
     |> (fn mapping ->
           if mapping == nil, do: {:error, "Unknown platform url"}, else: mapping[:type]
         end).()
+  end
+
+  defp get_system_info do
+    {family, name} = :os.type()
+    "#{Atom.to_string(family)}/#{Atom.to_string(name)}"
   end
 end
