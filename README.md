@@ -6,6 +6,9 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 
 将漫画网站的资源直接导出为离线阅读文件（EPUB/MOBI/PDF）。此项目正处于开发阶段：）
 
+## 演示
+
+![](https://raw.githubusercontent.com/Hentioe/manga.ex/master/.github/show.gif)
 
 ## TODO
 
