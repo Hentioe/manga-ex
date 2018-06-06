@@ -8,7 +8,7 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 
 ## 演示
 
-![](https://raw.githubusercontent.com/Hentioe/manga.ex/master/.github/show.gif)
+![show](https://raw.githubusercontent.com/Hentioe/manga.ex/master/.github/show.gif)
 
 ## TODO
 

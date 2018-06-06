@@ -1,6 +1,7 @@
 defmodule Manga.Res.EpubExport do
   import Manga.Utils.IOUtils
   import Manga.Res.EpubTpl
+  alias Manga.Model.Platform
   @behaviour Manga.Res.Export
 
   def save_from_stage(stage) do
@@ -9,6 +10,18 @@ defmodule Manga.Res.EpubExport do
     cache_dir = "./_res/.cache/#{stage.name}"
     meta_inf_path = "#{cache_dir}/META-INF"
     mkdir_not_exists([cache_dir, meta_inf_path])
+    # 写入 start.xhtml
+    start_xhtml_file = "#{cache_dir}/start.xhtml"
+
+    File.write(
+      start_xhtml_file,
+      start_xhtml(
+        stage.name,
+        Platform.create(name: "开发平台", url: "https://github.com/Hentioe/manga.ex"),
+        "AAAAAAAA"
+      )
+    )
+
     # 循环写入 xhtml 文件/复制图片
     stage.plist
     |> Enum.each(fn page ->
@@ -19,9 +32,9 @@ defmodule Manga.Res.EpubExport do
       |> File.copy("#{cache_dir}/#{page.p}.jpg")
     end)
 
-    # 写入 c.opf
-    c_opf_file = "#{cache_dir}/c.opf"
-    File.write(c_opf_file, c_opf(stage.name, length(stage.plist)))
+    # 写入 metadata.opf
+    metadata_opf_file = "#{cache_dir}/metadata.opf"
+    File.write(metadata_opf_file, metadata_opf(stage.name, length(stage.plist)))
 
     # 写入 mimetype
     mimetype_file = "#{cache_dir}/mimetype"
@@ -33,7 +46,7 @@ defmodule Manga.Res.EpubExport do
 
     # 写入 toc.ncx
     toc_ncx_file = "#{cache_dir}/toc.ncx"
-    File.write(toc_ncx_file, toc_ncx())
+    File.write(toc_ncx_file, toc_ncx(stage.name, length(stage.plist)))
 
     # 写入 META-INF/container.xml
     container_xml_file = "#{meta_inf_path}/container.xml"
@@ -41,7 +54,14 @@ defmodule Manga.Res.EpubExport do
 
     # 列表文件
     files =
-      [c_opf_file, mimetype_file, stylesheet_file, toc_ncx_file, container_xml_file]
+      [
+        start_xhtml_file,
+        metadata_opf_file,
+        mimetype_file,
+        stylesheet_file,
+        toc_ncx_file,
+        container_xml_file
+      ]
       |> Enum.map(&String.replace(&1, "#{cache_dir}/", ""))
 
     files =
