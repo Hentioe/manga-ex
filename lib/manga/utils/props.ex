@@ -2,8 +2,11 @@ defmodule Manga.Utils.Props do
   import Manga.Utils.Printer
   use Agent
 
+  @key_mac_string "mac_string"
   def start_link(_opts) do
-    props = %{}
+    props = %{
+      @key_mac_string => get_mac_string()
+    }
 
     Agent.start_link(fn -> props end, name: __MODULE__)
   end
@@ -86,6 +89,31 @@ defmodule Manga.Utils.Props do
   end
 
   def set_delay(_), do: nil
+
+  def get_mac_string do
+    {:ok, nlist} = :inet.getifaddrs()
+
+    mac_list =
+      nlist
+      |> Enum.map(fn {_, address_list} ->
+        case address_list do
+          [flags: _, hwaddr: hwaddr, addr: _, netmask: _, broadaddr: _, addr: _, netmask: _] ->
+            hwaddr
+
+          _ ->
+            nil
+        end
+      end)
+      |> Enum.filter(fn hwaddr -> hwaddr != nil end)
+      |> List.first()
+      |> Enum.map(fn n ->
+        Integer.to_string(n, 16)
+      end)
+
+    mac_list |> List.to_string()
+  end
+
+  def get_operator, do: get(@key_mac_string, "UNKNOWN")
 
   @key_fetch_delay "fetch_delay"
   def set_fetch_delay(millisecond), do: set_number(@key_fetch_delay, millisecond)

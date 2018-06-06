@@ -2,6 +2,7 @@ defmodule Manga do
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
+  alias Manga.Res.EpubExport
   use Tabula, style: :github_md
 
   @moduledoc """
@@ -24,18 +25,20 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha8-1"
+  @version "alpha8-2"
 
   @platforms [
     dmzj:
       Platform.create(
         name: "动漫之家",
-        origin: Manga.Res.DMZJOrigin
+        origin: Manga.Res.DMZJOrigin,
+        url: "https://manhua.dmzj.com"
       ),
     fzdm:
       Platform.create(
         name: "风之动漫",
-        origin: Manga.Res.FZDMOrigin
+        origin: Manga.Res.FZDMOrigin,
+        url: "https://www.fzdm.com"
       )
   ]
 
@@ -157,7 +160,7 @@ defmodule Manga do
              {:ok, path} <-
                (fn ->
                   render_export(stage.name, 1, 2)
-                  r = Manga.Res.EpubExport.save_from_stage(stage)
+                  r = EpubExport.save_from_stage(Stage.set_platform(stage, @platforms[key]))
                   render_export(stage.name, 2, 2)
                   newline()
                   r

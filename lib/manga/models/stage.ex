@@ -1,9 +1,9 @@
 defmodule Manga.Model.Stage do
-  defstruct [:name, :url, plist: []]
+  defstruct [:name, :url, :platform, plist: []]
 
   def create(props) when is_list(props) do
     plist = if(!props[:plist], do: [], else: props[:plist])
-    %__MODULE__{name: props[:name], url: props[:url], plist: plist}
+    %__MODULE__{name: props[:name], url: props[:url], platform: props[:platform], plist: plist}
   end
 
   def rename(stage, name) when is_binary(name) do
@@ -20,5 +20,9 @@ defmodule Manga.Model.Stage do
 
   def add_page(stage, page) do
     add_plist(stage, [page])
+  end
+
+  def set_platform(stage, platform) do
+    %{stage | platform: platform}
   end
 end

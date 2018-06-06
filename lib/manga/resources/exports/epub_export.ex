@@ -1,7 +1,7 @@
 defmodule Manga.Res.EpubExport do
   import Manga.Utils.IOUtils
   import Manga.Res.EpubTpl
-  alias Manga.Model.Platform
+  alias Manga.Utils.Props
   @behaviour Manga.Res.Export
 
   def save_from_stage(stage) do
@@ -12,15 +12,7 @@ defmodule Manga.Res.EpubExport do
     mkdir_not_exists([cache_dir, meta_inf_path])
     # 写入 start.xhtml
     start_xhtml_file = "#{cache_dir}/start.xhtml"
-
-    File.write(
-      start_xhtml_file,
-      start_xhtml(
-        stage.name,
-        Platform.create(name: "开发平台", url: "https://github.com/Hentioe/manga.ex"),
-        "AAAAAAAA"
-      )
-    )
+    File.write(start_xhtml_file, start_xhtml(stage.name, stage.platform, Props.get_operator()))
 
     # 循环写入 xhtml 文件/复制图片
     stage.plist

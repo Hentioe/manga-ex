@@ -4,4 +4,5 @@ defmodule Manga.Model.Platform do
   def create(props) do
     %__MODULE__{name: props[:name], origin: props[:origin], url: props[:url]}
   end
+
 end
