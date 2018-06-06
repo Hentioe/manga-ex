@@ -8,10 +8,11 @@ defmodule Manga.Res.DMZJOrigin do
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
 
-  def index(props \\ nil) do
-    {url, _page} =
-      case props do
-        nil -> {"https://manhua.dmzj.com/rank/", 1}
+  def index(more \\ 1) do
+    url =
+      case more do
+        1 -> "https://manhua.dmzj.com/rank/"
+        count -> "https://manhua.dmzj.com/rank/total-block-#{count}.shtml"
       end
 
     resp = HC.get(url)

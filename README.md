@@ -19,7 +19,7 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 - [x] 基于手动交互的 CLI 导出功能
 - [x] 改善输出格式
 - [x] 增加抓取延时和下载延时参数
-- [ ] 索引列表对查看更多的支持
+- [x] 索引列表对查看更多的支持
 - [ ] 更多的导出格式支持
 - [ ] 更多的资源来源支持
 - [ ] 读取配置文件启动任务

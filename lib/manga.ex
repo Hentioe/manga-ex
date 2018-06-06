@@ -24,7 +24,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha7-4"
+  @version "alpha8-0"
 
   @platforms [
     dmzj:
@@ -96,7 +96,9 @@ defmodule Manga do
       |> String.trim()
       |> Integer.parse()
 
-    Enum.at(list, n - 1) |> index
+    origin = Enum.at(list, n - 1)
+    Props.init_more(origin)
+    index(origin)
   end
 
   def action(:intellig, url: url) do
@@ -104,7 +106,7 @@ defmodule Manga do
   end
 
   defp index(p) do
-    case p.origin.index() do
+    case p.origin.index(Props.get_and_more()) do
       {:ok, list} ->
         newline()
 
@@ -114,8 +116,10 @@ defmodule Manga do
           print_result("[#{i + 1}]: #{manga_info.name}")
         end)
 
-        {n, _} = IOUtils.gets_number("\nPlease select a manga, [Number]: ")
-        Enum.at(list, n - 1).url |> export()
+        case IOUtils.gets_number("\n[Number -> Select a manga] or [Anything -> next page]: ") do
+          {n, _} -> Enum.at(list, n - 1).url |> export()
+          :error -> index(p)
+        end
 
       {:error, error} ->
         print_error(error)

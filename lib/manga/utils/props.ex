@@ -3,7 +3,26 @@ defmodule Manga.Utils.Props do
   use Agent
 
   def start_link(_opts) do
-    Agent.start_link(fn -> %{} end, name: __MODULE__)
+    props = %{}
+
+    Agent.start_link(fn -> props end, name: __MODULE__)
+  end
+
+  @key_more "more_count"
+  def init_more(module) do
+    put(@key_more, {module, 0})
+  end
+
+  def get_and_more do
+    case get(@key_more) do
+      {module, count} ->
+        next = count + 1
+        put(@key_more, {module, next})
+        next
+
+      _ ->
+        1
+    end
   end
 
   defp put(name, value) do
