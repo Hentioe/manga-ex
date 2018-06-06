@@ -20,7 +20,7 @@ defmodule Manga.MixProject do
   def application do
     [
       mod: {Manga, []},
-      extra_applications: [:logger, :eex]
+      extra_applications: [:logger, :eex, :tabula]
     ]
   end
 
@@ -33,7 +33,8 @@ defmodule Manga.MixProject do
       {:floki, "~> 0.20.2"},
       {:download, git: "https://github.com/Hentioe/download.ex.git", tag: "0.0.5"},
       {:uuid, "~> 1.1"},
-      {:progress_bar, "~> 1.6"}
+      {:progress_bar, "~> 1.6"},
+      {:tabula, "~> 2.2"}
     ]
   end
 end

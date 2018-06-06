@@ -15,6 +15,7 @@
   "parse_trans": {:hex, :parse_trans, "3.2.0", "2adfa4daf80c14dc36f522cf190eb5c4ee3e28008fc6394397c16f62a26258c2", [:rebar3], [], "hexpm"},
   "progress_bar": {:hex, :progress_bar, "1.6.1", "4a82aa4f2b04708dca7472febf5e73477f0e09c81fec98fc502c8d5e3d833172", [:mix], [], "hexpm"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], [], "hexpm"},
+  "tabula": {:hex, :tabula, "2.2.2", "14ae0db481b3e21feb95e28f968e30092b0ec706eacc837f1b3d4f8c4b86fca0", [:mix], [], "hexpm"},
   "unicode_util_compat": {:hex, :unicode_util_compat, "0.3.1", "a1f612a7b512638634a603c8f401892afbf99b8ce93a45041f8aaca99cadb85e", [:rebar3], [], "hexpm"},
   "uuid": {:hex, :uuid, "1.1.8", "e22fc04499de0de3ed1116b770c7737779f226ceefa0badb3592e64d5cfb4eb9", [:mix], [], "hexpm"},
   "yamerl": {:hex, :yamerl, "0.7.0", "e51dba652dce74c20a88294130b48051ebbbb0be7d76f22de064f0f3ccf0aaf5", [:rebar3], [], "hexpm"},

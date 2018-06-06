@@ -2,6 +2,7 @@ defmodule Manga do
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
+  use Tabula, style: :github_md
 
   @moduledoc """
   Documentation for Manga.
@@ -23,7 +24,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha7-3"
+  @version "alpha7-4"
 
   @platforms [
     dmzj:
@@ -149,7 +150,7 @@ defmodule Manga do
       {:fetch, key} ->
         with {:ok, stage} <- @platforms[key].origin.fetch(Stage.create(url: url)),
              {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
-             {:ok, _} <-
+             {:ok, path} <-
                (fn ->
                   render_export(stage.name, 1, 2)
                   r = Manga.Res.EpubExport.save_from_stage(stage)
@@ -158,6 +159,10 @@ defmodule Manga do
                   r
                 end).() do
           # 输出结果
+          [
+            %{"FORMAT" => "EPUB", "PATH" => path}
+          ]
+          |> print_table
         else
           {:error, error} ->
             print_error(error)
