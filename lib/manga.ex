@@ -23,7 +23,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha7-2"
+  @version "alpha7-3"
 
   @platforms [
     dmzj:

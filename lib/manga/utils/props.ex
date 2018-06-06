@@ -45,6 +45,7 @@ defmodule Manga.Utils.Props do
   def set_delay(delay_list) when is_binary(delay_list) do
     get_delay = fn ns ->
       delay_str = String.slice(ns, 1, String.length(ns))
+
       case String.at(ns, 0) do
         "f" ->
           {:f, delay_str}
@@ -64,6 +65,8 @@ defmodule Manga.Utils.Props do
       end
     end)
   end
+
+  def set_delay(_), do: nil
 
   @key_fetch_delay "fetch_delay"
   def set_fetch_delay(millisecond), do: set_number(@key_fetch_delay, millisecond)
