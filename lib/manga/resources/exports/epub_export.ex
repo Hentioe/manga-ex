@@ -1,8 +1,9 @@
 defmodule Manga.Res.EpubExport do
+  @behaviour Manga.Res.Export
+
   import Manga.Utils.IOUtils
   import Manga.Res.EpubTpl
   alias Manga.Utils.Props
-  @behaviour Manga.Res.Export
 
   def save_from_stage(stage) do
     output_path = "./_res/EPUBs/#{stage.name}.epub"
@@ -23,6 +24,11 @@ defmodule Manga.Res.EpubExport do
       "_res/assets/#{stage.name}/#{page.p}.jpg"
       |> File.copy("#{cache_dir}/#{page.p}.jpg")
     end)
+
+    # 复制第一张图为 cover.jpg
+    cover_source_file = "#{cache_dir}/1.jpg"
+    cover_file = "#{cache_dir}/cover.jpg"
+    File.copy(cover_source_file, cover_file)
 
     # 写入 metadata.opf
     metadata_opf_file = "#{cache_dir}/metadata.opf"
@@ -47,6 +53,7 @@ defmodule Manga.Res.EpubExport do
     # 列表文件
     files =
       [
+        cover_file,
         start_xhtml_file,
         metadata_opf_file,
         mimetype_file,

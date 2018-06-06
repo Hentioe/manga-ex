@@ -37,15 +37,14 @@ defmodule Manga.Res.EpubTpl do
 
   def stylesheet do
     ~s/.album {
-        display: block;
         padding: 0;
-        margin: 0;
+        text-align:center;
       }
       .albumimg {
         height: auto;
+        width: auto;
         max-height: 150%;
         max-width: 150%;
-        width: auto;
       }/
   end
 
@@ -98,6 +97,7 @@ defmodule Manga.Res.EpubTpl do
         <dc:identifier opf:scheme="calibre">#{uuid}</dc:identifier>
         <meta name="calibre:title_sort" content="#{title}"/>
         <meta name="calibre:author_link_map" content="\{&quot;Manga.ex&quot;: &quot;&quot;\}"/>
+        <meta name="cover" content="cover"/>
       </metadata>
       <manifest>
         <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
@@ -107,6 +107,7 @@ defmodule Manga.Res.EpubTpl do
         <item href="<%= i %>.xhtml" id="page<%= i %>" media-type="application/xhtml+xml"/>
         <item href="<%= i %>.jpg" id="img<%= i %>" media-type="image/jpeg"/>
     <% end %>
+        <item href="cover.jpg" id="cover" media-type="image/jpeg"/>
       </manifest>
       <spine toc="ncx">
         <itemref idref="start"/>

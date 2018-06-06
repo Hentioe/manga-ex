@@ -141,7 +141,7 @@ defmodule Manga.Res.DMZJOrigin do
           {:ok, stage}
 
         error ->
-          {:error, "Fetch:#{stage.name} Node.js -e error: #{error}"}
+          {:error, "Fetch:#{stage.name} Node.js: #{error}"}
       end
     else
       {:error, resp |> HCR.error_msg("Fetch:#{stage.name}")}

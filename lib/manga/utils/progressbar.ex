@@ -5,7 +5,7 @@ defmodule Manga.Utils.ProgressBar do
 
   def render_fetch(name, cur, tot) do
     format = [
-      left: [IO.ANSI.magenta(), "FETCHING:[#{name}]", IO.ANSI.reset(), " |"]
+      left: [IO.ANSI.magenta(), "FETCHING: [#{name}]", IO.ANSI.reset(), " |"]
     ]
 
     render(cur, tot, format)
@@ -13,7 +13,7 @@ defmodule Manga.Utils.ProgressBar do
 
   def render_download(name, cur, tot) do
     format = [
-      left: [IO.ANSI.magenta(), "DOWNLOAD:[#{name}]", IO.ANSI.reset(), " |"]
+      left: [IO.ANSI.magenta(), "DOWNLOAD: [#{name}]", IO.ANSI.reset(), " |"]
     ]
 
     render(cur, tot, format)
@@ -21,7 +21,7 @@ defmodule Manga.Utils.ProgressBar do
 
   def render_export(name, cur, tot) do
     format = [
-      left: [IO.ANSI.magenta(), "EXPORT  :[#{name}]", IO.ANSI.reset(), " |"]
+      left: [IO.ANSI.magenta(), "EXPORT  : [#{name}]", IO.ANSI.reset(), " |"]
     ]
 
     render(cur, tot, format)
@@ -30,6 +30,6 @@ defmodule Manga.Utils.ProgressBar do
   def render_indeterminate(name, caller) do
     name = if name == nil, do: "???", else: name
     IO.write(:stdio, "\n")
-    ProgressBar.render_spinner([text: "FETCHING:[#{name}]", done: "FETCHED:[#{name}]"], caller)
+    ProgressBar.render_spinner([text: "FETCHING: [#{name}]", done: "FETCHED:[#{name}]"], caller)
   end
 end

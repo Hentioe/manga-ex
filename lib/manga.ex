@@ -2,7 +2,6 @@ defmodule Manga do
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
-  alias Manga.Res.EpubExport
   use Tabula, style: :github_md
 
   @moduledoc """
@@ -25,7 +24,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha8-2"
+  @version "alpha9-0"
 
   @platforms [
     dmzj:
@@ -157,18 +156,34 @@ defmodule Manga do
       {:fetch, key} ->
         with {:ok, stage} <- @platforms[key].origin.fetch(Stage.create(url: url)),
              {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
-             {:ok, path} <-
+             rlist <-
                (fn ->
-                  render_export(stage.name, 1, 2)
-                  r = EpubExport.save_from_stage(Stage.set_platform(stage, @platforms[key]))
-                  render_export(stage.name, 2, 2)
-                  newline()
-                  r
+                  stage = Stage.set_platform(stage, @platforms[key])
+                  converter_list = get_converter_list()
+                  render_length = length(converter_list)
+                  render_export(stage.name, 0, render_length)
+
+                  converter_list
+                  |> Enum.with_index()
+                  |> Enum.map(fn {{format, converter}, i} ->
+                    r = converter.save_from_stage(stage)
+                    render_export(stage.name, i + 1, render_length)
+                    {format, r}
+                  end)
                 end).() do
+          newline()
           # 输出结果
-          [
-            %{"FORMAT" => "EPUB", "PATH" => path}
-          ]
+
+          rlist
+          |> Enum.map(fn r ->
+            case r do
+              {format, {:ok, path}} ->
+                %{"FORMAT" => format, "PATH" => path, "RESULT" => "✔"}
+
+              {format, {:error, error}} ->
+                %{"FORMAT" => format, "ERROR" => error, "RESULT" => "✘"}
+            end
+          end)
           |> print_table
         else
           {:error, error} ->
@@ -215,6 +230,10 @@ defmodule Manga do
   defp get_system_info do
     {family, name} = :os.type()
     "#{Atom.to_string(family)}/#{Atom.to_string(name)}"
+  end
+
+  defp get_converter_list do
+    [{"EPUB", Manga.Res.EpubExport}, {"MOBI", Manga.Res.MobiExport}, {"PDF", Manga.Res.PdfExport}]
   end
 
   def start(_type, _args) do
