@@ -23,7 +23,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha7-0"
+  @version "alpha7-2"
 
   @platforms [
     dmzj:
@@ -41,11 +41,17 @@ defmodule Manga do
   def main(args \\ []) do
     switches = [
       version: :boolean,
-      td: :integer,
-      dd: :integer
+      help: :boolean,
+      delay: :lists
     ]
 
-    parsed = OptionParser.parse(args, switches: switches)
+    aliases = [
+      v: :version,
+      h: :help,
+      d: :delay
+    ]
+
+    parsed = OptionParser.parse(args, switches: switches, aliases: aliases)
     # IO.inspect(parsed)
 
     case parsed do
@@ -56,13 +62,12 @@ defmodule Manga do
         print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
         print_normal("Manga.ex #{@version}")
 
-      {props, unknowns, _} ->
-        Props.set_fd(props[:td])
-        Props.set_dd(props[:dd])
+      {props, argv, _} ->
+        Props.set_delay(props[:delay])
 
-        if length(unknowns) > 0 do
+        if length(argv) > 0 do
           url =
-            unknowns
+            argv
             |> List.first()
 
           action(:intellig, url: url)
@@ -149,6 +154,7 @@ defmodule Manga do
                   render_export(stage.name, 1, 2)
                   r = Manga.Res.EpubExport.save_from_stage(stage)
                   render_export(stage.name, 2, 2)
+                  newline()
                   r
                 end).() do
           # 输出结果
@@ -200,6 +206,6 @@ defmodule Manga do
   end
 
   def start(_type, _args) do
-    Manga.Utils.Props.start_link(%{})
+    Props.start_link(%{})
   end
 end

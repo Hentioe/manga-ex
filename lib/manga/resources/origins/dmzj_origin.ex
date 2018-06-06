@@ -5,7 +5,9 @@ defmodule Manga.Res.DMZJOrigin do
   alias Manga.Model.Page
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
+  import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
+
   def index(props \\ nil) do
     {url, _page} =
       case props do
@@ -92,6 +94,7 @@ defmodule Manga.Res.DMZJOrigin do
   @page_http_options [ssl: [{:versions, [:"tlsv1.2"]}]]
 
   def fetch(stage) do
+    newline()
     render_fetch("???", 0, 1)
     resp = HC.get(stage.url)
 

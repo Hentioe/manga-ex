@@ -10,64 +10,68 @@ defmodule Manga.Utils.Props do
     Agent.update(__MODULE__, fn props -> Map.put(props, name, value) end)
   end
 
-  def get(name) when is_binary(name) do
-    Agent.get(__MODULE__, fn props -> Map.get(props, name) end)
+  def get(name, default \\ nil) when is_binary(name) do
+    Agent.get(__MODULE__, fn props -> Map.get(props, name, default) end)
   end
 
   def get_all do
     Agent.get(__MODULE__, fn props -> props end)
   end
 
-  @key_fd "fd"
-  def set_fd(millisecond) do
-    millisecond = if millisecond == nil, do: 0, else: millisecond
+  defp set_number(key, value, default \\ 0) do
+    value = if value == nil, do: 0, else: value
 
-    if !is_integer(millisecond) do
-      case Integer.parse(millisecond) do
+    if !is_integer(value) do
+      case Integer.parse(value) do
         {n, _} ->
-          put(@key_fd, n)
+          put(key, n)
 
         {:error} ->
-          print_warring("[props:fd] is not a number")
-          put(@key_fd, 0)
+          print_warring("[props:#{key}] is not a number")
+          put(key, default)
       end
     else
-      put(@key_fd, millisecond)
+      put(key, value)
     end
   end
 
-  def get_fd do
-    get(@key_fd)
-  end
-
-  @key_dd "dd"
-  def set_dd(millisecond) do
-    millisecond = if millisecond == nil, do: 0, else: millisecond
-
-    if !is_integer(millisecond) do
-      case Integer.parse(millisecond) do
-        {n, _} ->
-          put(@key_dd, n)
-
-        {:error} ->
-          print_warring("[props:dd] is not a number")
-          put(@key_dd, 0)
-      end
-    else
-      put(@key_dd, millisecond)
+  defp get_number(key, default \\ 0) do
+    case get(key) do
+      nil -> default
+      v -> v
     end
   end
 
-  def get_dd do
-    get(@key_dd)
+  def set_delay(delay_list) when is_binary(delay_list) do
+    get_delay = fn ns ->
+      delay_str = String.slice(ns, 1, String.length(ns))
+      case String.at(ns, 0) do
+        "f" ->
+          {:f, delay_str}
+
+        "d" ->
+          {:d, delay_str}
+      end
+    end
+
+    delay_list
+    |> String.split(",")
+    |> Enum.filter(fn ns -> String.trim(ns, " ") != "" end)
+    |> Enum.each(fn ns ->
+      case get_delay.(ns) do
+        {:f, delay} -> set_fetch_delay(delay)
+        {:d, delay} -> set_download_delay(delay)
+      end
+    end)
   end
 
-  @key_url "url"
-  def set_url(url) do
-    put(@key_url, url)
-  end
+  @key_fetch_delay "fetch_delay"
+  def set_fetch_delay(millisecond), do: set_number(@key_fetch_delay, millisecond)
 
-  def get_url do
-    get(@key_url)
-  end
+  def get_fetch_delay, do: get_number(@key_fetch_delay)
+
+  @key_download_delay "download_delay"
+  def set_download_delay(millisecond), do: set_number(@key_download_delay, millisecond)
+
+  def get_download_delay, do: get_number(@key_download_delay)
 end

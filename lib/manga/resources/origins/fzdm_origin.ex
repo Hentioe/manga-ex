@@ -80,7 +80,7 @@ defmodule Manga.Res.FZDMOrigin do
 
   def each_fetch(stage, n \\ 0) do
     resp = HC.get(stage.url <> "index_#{n}.html")
-    :timer.sleep(Props.get_dd())
+    :timer.sleep(Props.get_fetch_delay())
 
     if HCR.success?(resp) do
       html =

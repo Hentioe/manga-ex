@@ -47,7 +47,7 @@ defmodule Manga.Utils.Downloader do
         stage
         |> from_page(page)
 
-        :timer.sleep(Props.get_dd())
+        :timer.sleep(Props.get_download_delay())
         render_download(stage.name, i + 1, total)
       end)
 
