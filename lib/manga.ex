@@ -26,7 +26,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-1"
+  @version "alpha9-2"
 
   @platforms [
     dmzj:
@@ -243,6 +243,10 @@ defmodule Manga do
     [
       pattern: ~r/https?:\/\/www\.dm5\.com\/[^\/]+\/?$/i,
       type: {:stages, :dm5}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuagui\.com/comic/\d+/?$}i,
+      type: {:stages, :mhg}
     ]
   ]
 
