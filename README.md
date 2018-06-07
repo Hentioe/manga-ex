@@ -10,7 +10,7 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 
 ![show](https://raw.githubusercontent.com/Hentioe/manga.ex/master/.github/show.gif)
 
-## TODO
+## TODO(1.0)
 
 - [x] 基础资源爬取功能
 - [x] 下载模块基础实现
@@ -21,6 +21,6 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 - [x] 增加抓取延时和下载延时参数
 - [x] 索引列表对查看更多的支持
 - [x] 更多的导出格式支持
+- [x] 列表支持区间以及多项选择
 - [ ] 更多的资源来源支持
 - [ ] 读取配置文件启动任务
-- [ ] 并发抓取/下载以及相应的并发量限制

@@ -141,10 +141,10 @@ defmodule Manga.Res.DMZJOrigin do
           {:ok, stage}
 
         error ->
-          {:error, "Fetch:#{stage.name} Node.js: #{error}"}
+          {:error, "Fetch:[#{stage.name}] Node.js: #{error}"}
       end
     else
-      {:error, resp |> HCR.error_msg("Fetch:#{stage.name}")}
+      {:error, resp |> HCR.error_msg("Fetch:[#{stage.name}]")}
     end
   end
 end

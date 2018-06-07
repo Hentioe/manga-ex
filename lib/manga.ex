@@ -1,4 +1,6 @@
 defmodule Manga do
+  use Application
+
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
@@ -24,7 +26,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-0"
+  @version "alpha9-1"
 
   @platforms [
     dmzj:
@@ -38,6 +40,24 @@ defmodule Manga do
         name: "风之动漫",
         origin: Manga.Res.FZDMOrigin,
         url: "https://www.fzdm.com"
+      ),
+    dmk:
+      Platform.create(
+        name: "動漫狂",
+        origin: Manga.Res.DMKOrigin,
+        url: "http://www.cartoonmad.com"
+      ),
+    mhg:
+      Platform.create(
+        name: "漫画柜",
+        origin: Manga.Res.MHGOrigin,
+        url: "https://www.manhuagui.com"
+      ),
+    dm5:
+      Platform.create(
+        name: "动漫屋",
+        origin: Manga.Res.DM5Origin,
+        url: "http://www.dm5.com/"
       )
   ]
 
@@ -89,7 +109,12 @@ defmodule Manga do
       |> Enum.map(fn {_, platform} -> platform end)
       |> Enum.with_index()
       |> Enum.map(fn {platform, i} ->
-        print_result("[#{i + 1}]: #{platform.name}")
+        print_result(
+          "[#{i + 1}]: #{platform.name}#{
+            if platform.flags == nil, do: "", else: "(#{platform.flags})"
+          }"
+        )
+
         platform
       end)
 
@@ -118,7 +143,7 @@ defmodule Manga do
           print_result("[#{i + 1}]: #{manga_info.name}")
         end)
 
-        case IOUtils.gets_number("\n[Number -> Select a manga] or [Anything -> next page]: ") do
+        case IOUtils.gets_number("\n[Number -> select a manga] or [Anything -> next page]: ") do
           {n, _} -> Enum.at(list, n - 1).url |> export()
           :error -> index(p)
         end
@@ -144,9 +169,8 @@ defmodule Manga do
                 stage
               end)
 
-            {n, _} = IOUtils.gets_number("\nPlease select a stage, [Number]: ")
-
-            Enum.at(list, n - 1).url |> export()
+            IOUtils.gets_numbers("\nPlease select a stage, [n/n1,n2/n1-n5,n7]: ")
+            |> Enum.each(fn n -> Enum.at(list, n - 1).url |> export() end)
 
           {:error, error} ->
             print_error(error)
@@ -211,6 +235,14 @@ defmodule Manga do
     [
       pattern: ~r/https?:\/\/manhua\.dmzj\.com\/[^\/]+\/\d+\.shtml/i,
       type: {:fetch, :dmzj}
+    ],
+    [
+      pattern: ~r/https?:\/\/www\.dm5\.com\/m\d{6,}[^\/]*\/?$/i,
+      type: {:fetch, :dm5}
+    ],
+    [
+      pattern: ~r/https?:\/\/www\.dm5\.com\/[^\/]+\/?$/i,
+      type: {:stages, :dm5}
     ]
   ]
 

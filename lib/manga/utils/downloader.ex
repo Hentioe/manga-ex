@@ -26,8 +26,8 @@ defmodule Manga.Utils.Downloader do
            headers: page.http_headers,
            options: page.http_options
          ) do
-      {:ok, path} ->
-        {:ok, path}
+      ok ->
+        ok
 
       error ->
         error

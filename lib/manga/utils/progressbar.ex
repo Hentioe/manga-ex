@@ -30,6 +30,6 @@ defmodule Manga.Utils.ProgressBar do
   def render_indeterminate(name, caller) do
     name = if name == nil, do: "???", else: name
     IO.write(:stdio, "\n")
-    ProgressBar.render_spinner([text: "FETCHING: [#{name}]", done: "FETCHED:[#{name}]"], caller)
+    ProgressBar.render_spinner([text: "FETCHING: [#{name}]", done: "FETCHED: [#{name}]"], caller)
   end
 end
