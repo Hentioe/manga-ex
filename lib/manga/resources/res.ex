@@ -56,6 +56,12 @@ defmodule Manga.Res do
         name: "非常爱漫",
         origin: Manga.Res.VeryDMOrigin,
         url: "http://www.verydm.com"
+      ),
+    xxmhw:
+      Platform.create(
+        name: "新新漫画网",
+        origin: Manga.Res.XXMHWOrigin,
+        url: "https://www.177mh.net"
       )
   ]
 
@@ -99,6 +105,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.verydm\.com/chapter\.php\?id=\d+$}i,
       type: {:fetch, :verydm}
+    ],
+    [
+      pattern: ~r{https?://www\.177mh\.net/colist_\d+\.html$}i,
+      type: {:stages, :xxmhw}
+    ],
+    [
+      pattern: ~r{https?://www\.177mh\.net/\d+/\d+.html$}i,
+      type: {:fetch, :xxmhw}
     ]
   ]
 

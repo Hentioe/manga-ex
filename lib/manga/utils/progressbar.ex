@@ -4,6 +4,7 @@ defmodule Manga.Utils.ProgressBar do
   end
 
   def render_fetch(name, cur, tot) do
+    name = if name == nil, do: "???", else: name
     format = [
       left: [IO.ANSI.magenta(), "FETCHING: [#{name}]", IO.ANSI.reset(), " |"]
     ]

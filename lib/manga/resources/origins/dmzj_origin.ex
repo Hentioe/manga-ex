@@ -96,7 +96,7 @@ defmodule Manga.Res.DMZJOrigin do
 
   def fetch(stage) do
     newline()
-    render_fetch("???", 0, 1)
+    render_fetch(stage.name, 0, 1)
     resp = HC.get(stage.url)
 
     if HCR.success?(resp) do

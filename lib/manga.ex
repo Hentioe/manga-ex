@@ -5,7 +5,7 @@ defmodule Manga do
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
-  use Tabula, style: :github_md
+  use Tabula
 
   @moduledoc """
   Documentation for Manga.
