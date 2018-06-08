@@ -247,6 +247,10 @@ defmodule Manga do
     [
       pattern: ~r{https?://www\.manhuagui\.com/comic/\d+/?$}i,
       type: {:stages, :mhg}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuagui\.com/comic/\d+/\d+.html$}i,
+      type: {:fetch, :mhg}
     ]
   ]
 

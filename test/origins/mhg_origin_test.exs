@@ -20,11 +20,11 @@ defmodule Manga.Res.MHGOriginTest do
   #   assert length(result.stage_list) == 128
   # end
 
-  # test "fetch" do
-  #   {state, result} = fetch(Stage.create(url: "http://www.dm5.com/m617894/"))
-  #   assert state == :ok
-  #   assert result.name != nil
-  #   assert is_list(result.plist)
-  #   assert length(result.plist) == 18
-  # end
+  test "fetch" do
+    {state, result} = fetch(Stage.create(url: "https://www.manhuagui.com/comic/2863/372981.html"))
+    assert state == :ok
+    assert result.name != nil
+    assert is_list(result.plist)
+    assert length(result.plist) == 21
+  end
 end
