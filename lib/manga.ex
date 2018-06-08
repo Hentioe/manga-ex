@@ -1,6 +1,7 @@
 defmodule Manga do
   use Application
 
+  import Manga.Res
   import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props
@@ -26,40 +27,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-2"
-
-  @platforms [
-    dmzj:
-      Platform.create(
-        name: "动漫之家",
-        origin: Manga.Res.DMZJOrigin,
-        url: "https://manhua.dmzj.com"
-      ),
-    fzdm:
-      Platform.create(
-        name: "风之动漫",
-        origin: Manga.Res.FZDMOrigin,
-        url: "https://www.fzdm.com"
-      ),
-    dmk:
-      Platform.create(
-        name: "動漫狂",
-        origin: Manga.Res.DMKOrigin,
-        url: "http://www.cartoonmad.com"
-      ),
-    mhg:
-      Platform.create(
-        name: "漫画柜",
-        origin: Manga.Res.MHGOrigin,
-        url: "https://www.manhuagui.com"
-      ),
-    dm5:
-      Platform.create(
-        name: "动漫屋",
-        origin: Manga.Res.DM5Origin,
-        url: "http://www.dm5.com/"
-      )
-  ]
+  @version "alpha9-3"
 
   def main(args \\ []) do
     switches = [
@@ -105,7 +73,7 @@ defmodule Manga do
     print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
 
     list =
-      @platforms
+      get_platforms()
       |> Enum.map(fn {_, platform} -> platform end)
       |> Enum.with_index()
       |> Enum.map(fn {platform, i} ->
@@ -159,7 +127,7 @@ defmodule Manga do
       {:stages, key} ->
         newline()
 
-        case @platforms[key].origin.stages(Info.create(url: url)) do
+        case get_platform(key).origin.stages(Info.create(url: url)) do
           {:ok, manga_info} ->
             list =
               manga_info.stage_list
@@ -178,11 +146,11 @@ defmodule Manga do
 
       # 获取漫画内容（下载并保存）
       {:fetch, key} ->
-        with {:ok, stage} <- @platforms[key].origin.fetch(Stage.create(url: url)),
+        with {:ok, stage} <- get_origin_by_platform(key).fetch(Stage.create(url: url)),
              {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
              rlist <-
                (fn ->
-                  stage = Stage.set_platform(stage, @platforms[key])
+                  stage = Stage.set_platform(stage, get_platform(key))
                   converter_list = get_converter_list()
                   render_length = length(converter_list)
                   render_export(stage.name, 0, render_length)
@@ -219,45 +187,10 @@ defmodule Manga do
     end
   end
 
-  @url_mapping [
-    [
-      pattern: ~r/https?:\/\/manhua\.fzdm\.com\/\d+\/$/i,
-      type: {:stages, :fzdm}
-    ],
-    [
-      pattern: ~r/https?:\/\/manhua\.fzdm\.com\/\d+\/[^\/]+\//i,
-      type: {:fetch, :fzdm}
-    ],
-    [
-      pattern: ~r/https?:\/\/manhua\.dmzj\.com\/[^\/]+\/?$/i,
-      type: {:stages, :dmzj}
-    ],
-    [
-      pattern: ~r/https?:\/\/manhua\.dmzj\.com\/[^\/]+\/\d+\.shtml/i,
-      type: {:fetch, :dmzj}
-    ],
-    [
-      pattern: ~r/https?:\/\/www\.dm5\.com\/m\d{6,}[^\/]*\/?$/i,
-      type: {:fetch, :dm5}
-    ],
-    [
-      pattern: ~r/https?:\/\/www\.dm5\.com\/[^\/]+\/?$/i,
-      type: {:stages, :dm5}
-    ],
-    [
-      pattern: ~r{https?://www\.manhuagui\.com/comic/\d+/?$}i,
-      type: {:stages, :mhg}
-    ],
-    [
-      pattern: ~r{https?://www\.manhuagui\.com/comic/\d+/\d+.html$}i,
-      type: {:fetch, :mhg}
-    ]
-  ]
-
   defp platform?(url) do
     is_match = fn pattern -> Regex.match?(pattern, url) end
 
-    @url_mapping
+    get_url_mapping()
     |> Enum.filter(fn mapping ->
       is_match.(mapping[:pattern])
     end)

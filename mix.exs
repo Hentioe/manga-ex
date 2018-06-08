@@ -34,7 +34,7 @@ defmodule Manga.MixProject do
       {:download, git: "https://github.com/Hentioe/download.ex.git", tag: "0.0.5"},
       {:uuid, "~> 1.1"},
       {:progress_bar, "~> 1.6"},
-      {:tabula, "~> 2.2"},
+      {:tabula, "~> 2.2"}
       # {:elixir_mbcs, github: "woxtu/elixir-mbcs", tag: "0.1.3"}
     ]
   end
