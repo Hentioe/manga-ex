@@ -238,9 +238,11 @@ defmodule Manga do
     end
   end
 
+  def version, do: @version
+
   defp print_version do
     print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
-    print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version})")
+    print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version()})")
   end
 
   def start(_type, _args) do

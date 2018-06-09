@@ -1,0 +1,1 @@
+escript.exe manga $args

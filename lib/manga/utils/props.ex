@@ -95,6 +95,7 @@ defmodule Manga.Utils.Props do
 
     nlist
     |> Enum.map(fn {_, address_list} -> address_list end)
+    |> Enum.filter(fn address_list -> address_list[:hwaddr] != nil  end)
     |> Enum.map(fn address_list ->
       address_list[:hwaddr]
       |> Enum.map(fn hw_unit ->
