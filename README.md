@@ -1,6 +1,6 @@
 # Manga
 
-Export mangas from the website, use Elixir/Erlang to achieve!
+Online comic offline export tool, implemented using Elixir!
 
 ## 说明
 
@@ -22,5 +22,6 @@ Export mangas from the website, use Elixir/Erlang to achieve!
 - [x] 索引列表对查看更多的支持
 - [x] 更多的导出格式支持
 - [x] 列表支持区间以及多项选择
-- [ ] 更多的资源来源支持
+- [x] 更多的资源来源支持
+- [ ] 针对 Windows 去掉输出的 ANSI 颜色（不兼容）
 - [ ] 读取配置文件启动任务

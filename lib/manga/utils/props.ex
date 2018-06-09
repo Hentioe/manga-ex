@@ -95,20 +95,16 @@ defmodule Manga.Utils.Props do
 
     mac_list =
       nlist
-      |> Enum.map(fn {_, address_list} ->
-        case address_list do
-          [flags: _, hwaddr: hwaddr, addr: _, netmask: _, broadaddr: _, addr: _, netmask: _] ->
-            hwaddr
-
-          _ ->
-            nil
-        end
+      |> Enum.filter(fn {_, address_list} ->
+        length(address_list) == 8
       end)
-      |> Enum.filter(fn hwaddr -> hwaddr != nil end)
+      |> Enum.filter(fn {_, address_list} -> address_list[:hwaddr] != nil end)
+      |> Enum.map(fn {_, address_list} -> address_list end)
       |> List.first()
-      |> Enum.map(fn n ->
-        Integer.to_string(n, 16)
-      end)
+      |> (fn address_list ->
+            address_list[:hwaddr]
+          end).()
+      |> Enum.map(fn hw_unit -> Integer.to_string(hw_unit, 16) end)
 
     mac_list |> List.to_string()
   end

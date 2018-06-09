@@ -25,11 +25,24 @@ defmodule Manga do
   end
 
   use Manga.Res, :models
+  import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-6"
+  @version "alpha9-7"
 
   def main(args \\ []) do
+    case passed() do
+      {:error, msg} ->
+        print_error(msg)
+        System.halt(1)
+
+      {:warning, msg} ->
+        print_warring(msg)
+
+      _ ->
+        nil
+    end
+
     switches = [
       version: :boolean,
       help: :boolean,
@@ -206,7 +219,19 @@ defmodule Manga do
   end
 
   defp get_converter_list do
-    [{"EPUB", Manga.Res.EpubExport}, {"MOBI", Manga.Res.MobiExport}, {"PDF", Manga.Res.PdfExport}]
+    converts = [{"EPUB", Manga.Res.EpubExport}]
+
+    if install_converter?(),
+      do: converts ++ [{"MOBI", Manga.Res.MobiExport}, {"PDF", Manga.Res.PdfExport}],
+      else: converts
+  end
+
+  defp passed do
+    cond do
+      !install_node?() -> {:error, "Please install Node.js: https://nodejs.org"}
+      !install_converter?() -> {:warning, "Missing conversion tools will limit the output format!"}
+      true -> {:ok}
+    end
   end
 
   def start(_type, _args) do
