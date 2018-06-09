@@ -27,7 +27,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-3"
+  @version "alpha9-4"
 
   def main(args \\ []) do
     switches = [
@@ -170,10 +170,10 @@ defmodule Manga do
           |> Enum.map(fn r ->
             case r do
               {format, {:ok, path}} ->
-                %{"FORMAT" => format, "PATH" => path, "RESULT" => "✔"}
+                %{"FORMAT" => format, "INFO" => path, "RESULT" => "✔"}
 
               {format, {:error, error}} ->
-                %{"FORMAT" => format, "ERROR" => error, "RESULT" => "✘"}
+                %{"FORMAT" => format, "INFO" => error, "RESULT" => "✘"}
             end
           end)
           |> print_table

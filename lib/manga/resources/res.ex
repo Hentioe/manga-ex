@@ -62,6 +62,12 @@ defmodule Manga.Res do
         name: "新新漫画网",
         origin: Manga.Res.XXMHWOrigin,
         url: "https://www.177mh.net"
+      ),
+    mht:
+      Platform.create(
+        name: "漫画台",
+        origin: Manga.Res.MHTOrigin,
+        url: "http://www.manhuatai.com"
       )
   ]
 
@@ -113,6 +119,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.177mh\.net/\d+/\d+.html$}i,
       type: {:fetch, :xxmhw}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuatai\.com/[^/]+/?$}i,
+      type: {:stages, :mht}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuatai\.com/.+/.+\.html$}i,
+      type: {:fetch, :mht}
     ]
   ]
 
