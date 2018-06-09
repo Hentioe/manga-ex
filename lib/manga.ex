@@ -28,7 +28,7 @@ defmodule Manga do
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-8"
+  @version "alpha9-9"
 
   def main(args \\ []) do
     case passed() do
@@ -63,8 +63,7 @@ defmodule Manga do
         File.rm_rf("./_res/.cache")
 
       {[version: true], _, _} ->
-        print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
-        print_normal("Manga.ex #{@version}")
+        print_version()
 
       {props, argv, _} ->
         Props.set_delay(props[:delay])
@@ -228,10 +227,20 @@ defmodule Manga do
 
   defp passed do
     cond do
-      !install_node?() -> {:error, "Please install Node.js: https://nodejs.org"}
-      !install_converter?() -> {:warning, "Missing conversion tools will limit the output format!"}
-      true -> {:ok}
+      !install_node?() ->
+        {:error, "Please install Node.js: https://nodejs.org"}
+
+      !install_converter?() ->
+        {:warning, "Missing conversion tools will limit the output format!"}
+
+      true ->
+        {:ok}
     end
+  end
+
+  defp print_version do
+    print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
+    print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version})")
   end
 
   def start(_type, _args) do
