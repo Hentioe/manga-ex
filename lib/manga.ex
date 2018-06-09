@@ -28,7 +28,7 @@ defmodule Manga do
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-9"
+  @version "alpha9-10"
 
   def main(args \\ []) do
     case passed() do
