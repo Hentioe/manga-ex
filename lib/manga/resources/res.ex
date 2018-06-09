@@ -74,6 +74,12 @@ defmodule Manga.Res do
         name: "古风漫画网",
         origin: Manga.Res.GFMHWOrigin,
         url: "http://www.gufengmh.com"
+      ),
+    hhmh:
+      Platform.create(
+        name: "汗汗漫画",
+        origin: Manga.Res.HHMHOrigin,
+        url: "http://www.hhmmoo.com"
       )
   ]
 
@@ -141,6 +147,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.gufengmh\.com/manhua/[^\/]+/\d+\.html$}i,
       type: {:fetch, :gfmhw}
+    ],
+    [
+      pattern: ~r{https?://www\.hhmmoo\.com/manhua\d+\.html$}i,
+      type: {:stages, :hhmh}
+    ],
+    [
+      pattern: ~r{https?://www\.hhmmoo\.com/page\d+/\d+\.html\?}i,
+      type: {:fetch, :hhmh}
     ]
   ]
 

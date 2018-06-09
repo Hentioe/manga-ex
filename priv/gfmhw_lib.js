@@ -1,4 +1,4 @@
-// Variables chapterImages&chapterPath here
+// Variables: chapterImages, chapterPath here
 images = ""
 chapterImages.forEach((img, i) => {
     images += `"${img}"`
