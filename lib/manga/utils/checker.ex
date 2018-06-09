@@ -10,7 +10,7 @@ defmodule Manga.Utils.Checker do
   end
 
   def install_converter? do
-    case cmd("ebook-convert1", ["--version"]) do
+    case cmd("ebook-convert", ["--version"]) do
       {:ok, _} ->
         true
 

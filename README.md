@@ -6,9 +6,49 @@ Online comic offline export tool, implemented using Elixir!
 
 将漫画网站的资源直接导出为离线阅读文件（EPUB/MOBI/PDF）。此项目正处于开发阶段：）
 
+
+需要注意的是，这是一个使用 Elixir 实现的项目。它的运行需要依赖 [Erlang]()，就像 Java 软件需要 JRE 那样 :)
+
+PS: 如果你从 [RELEASE](https://github.com/Hentioe/manga.ex/releases) 页面下载使用本软件，请务必安装 20 或以上的 Erlang/OTP 版本。
+
 ## 演示
 
 ![show](https://raw.githubusercontent.com/Hentioe/manga.ex/master/.github/show.gif)
+
+## 说明
+
+
+正如你所看到的，这个软件可以从 CLI 交互中选择平台导出(漫画)资源，也可以直接粘贴资源的 URL(会识别是否支持)进行导出。
+
+
+当前 Manga.ex 支持 9 个以上的漫画平台，下面会列举出来。不过我从来不吝啬多支持几个(暂时只接受 Web 在线网站，不接受 APP)，所以欢迎你向我提交你想支持的网站 :)
+
+
+Manga.ex 导出格式有三种，分别是 EPUB/MOBI/PDF，其中 EPUB 是基本格式，被直接支持。而 MOBI 和 PDF 需要安装 [Calibre](https://calibre-ebook.com/download) 在基础格式 EPUB 资源模板的基础上进行转换。
+
+PS: Calibre 是一个开源的电子书工具箱， Manga.ex 和 Calibre 的交互对用户而言是透明的。
+
+
+由于很多网站都使用各种怪异的 Javascript 函数来混淆资源地址，分析函数并重新在 Elixir 上实现是一件非常消耗精力的事情，我并不打算这么做。所以，想让本软件工作需要在系统上安装 [Node.js](https://nodejs.org/zh-cn/download/) 以作为 Javascript 的 Runtime 支持(Manga.ex 会将那些奇奇怪怪的 JS 函数扩展为解密所需的代码块，然后交给 Node.js 去执行)。
+
+PS: Node.js 是一个 Javascipt 运行环境。与 Calibre 不同的是，前者缺失会导致输出格式受限，而后者不被允许缺失，也就是说 Node.js 是必装的。
+
+
+## 用法
+
+
+暂时懒得写（GIF 已经展示出核心功能了）。
+
+
+## 目的和目标
+
+
+本软件最初的目的是为了方便我个人。我经常需要找 EPUB 格式的漫画资源，放进我的电子书阅读器（类似 Kindle）中阅读。现在因为想开源并造福更多的用户，所以对大量的我并不需要的网站和平台进行了支持。
+
+
+当前还是 Alpha 版本，在 1.0 TODO 全部完成以后会进入 Beta 阶段，并期待早日出现足够完善的正式版本（所以我需要你们向我提 BUG）。  
+2.0 版本的主要目标是并发抓取和下载，并对分布式进行支持。
+
 
 ## TODO(1.0)
 

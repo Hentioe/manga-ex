@@ -74,8 +74,6 @@ defmodule Manga.Res.EpubExport do
 
     files = files |> Enum.map(&String.to_charlist(&1))
 
-    IO.inspect(files)
-
     :zip.create(output_path, files, cwd: cache_dir)
   end
 end
