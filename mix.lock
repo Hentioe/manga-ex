@@ -13,6 +13,7 @@
   "ibrowse": {:hex, :ibrowse, "4.4.0", "2d923325efe0d2cb09b9c6a047b2835a5eda69d8a47ed6ff8bc03628b764e991", [:rebar3], [], "hexpm"},
   "idna": {:hex, :idna, "5.1.1", "cbc3b2fa1645113267cc59c760bafa64b2ea0334635ef06dbac8801e42f7279c", [:rebar3], [{:unicode_util_compat, "0.3.1", [hex: :unicode_util_compat, repo: "hexpm", optional: false]}], "hexpm"},
   "imagineer": {:hex, :imagineer, "0.3.2", "42d2e9a9fcc83e8656fbe590828878b81c90e0b33fcbd59c69a33f9c8f9c412a", [:mix], [{:apex, "~>1.0.0", [hex: :apex, repo: "hexpm", optional: false]}], "hexpm"},
+  "macaddr": {:git, "https://github.com/mmullis/erlang-macaddr", "dfdf009fdceeca686427bfde6e3c8ff8762e267b", []},
   "mbcs": {:git, "https://github.com/nekova/erlang-mbcs.git", "7bc88e28624abd6780073241e3bbb01b874b6a16", []},
   "metrics": {:hex, :metrics, "1.0.1", "25f094dea2cda98213cecc3aeff09e940299d950904393b2a29d191c346a8486", [:rebar3], [], "hexpm"},
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], [], "hexpm"},

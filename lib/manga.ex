@@ -28,7 +28,7 @@ defmodule Manga do
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-7"
+  @version "alpha9-8"
 
   def main(args \\ []) do
     case passed() do
@@ -37,7 +37,7 @@ defmodule Manga do
         System.halt(1)
 
       {:warning, msg} ->
-        print_warring(msg)
+        print_warning(msg)
 
       _ ->
         nil

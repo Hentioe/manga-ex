@@ -19,7 +19,7 @@ defmodule Manga.Utils.Printer do
     "\n" |> (&IO.write(:stdio, &1)).()
   end
 
-  def print_warring(text) do
-    IO.puts("#{IO.ANSI.yellow()}[Warring] #{text}")
+  def print_warning(text) do
+    IO.puts("#{IO.ANSI.yellow()}[Warning] #{text}")
   end
 end

@@ -49,7 +49,7 @@ defmodule Manga.Utils.Props do
           put(key, n)
 
         {:error} ->
-          print_warring("[props:#{key}] is not a number")
+          print_warning("[props:#{key}] is not a number")
           put(key, default)
       end
     else
@@ -93,20 +93,22 @@ defmodule Manga.Utils.Props do
   def get_mac_string do
     {:ok, nlist} = :inet.getifaddrs()
 
-    mac_list =
-      nlist
-      |> Enum.filter(fn {_, address_list} ->
-        length(address_list) == 8
+    nlist
+    |> Enum.map(fn {_, address_list} -> address_list end)
+    |> Enum.map(fn address_list ->
+      address_list[:hwaddr]
+      |> Enum.map(fn hw_unit ->
+        Integer.to_string(hw_unit, 16)
       end)
-      |> Enum.filter(fn {_, address_list} -> address_list[:hwaddr] != nil end)
-      |> Enum.map(fn {_, address_list} -> address_list end)
-      |> List.first()
-      |> (fn address_list ->
-            address_list[:hwaddr]
-          end).()
-      |> Enum.map(fn hw_unit -> Integer.to_string(hw_unit, 16) end)
-
-    mac_list |> List.to_string()
+      |> List.to_string()
+    end)
+    |> Enum.filter(fn address ->
+      case address do
+        "000000" -> false
+        _ -> true
+      end
+    end)
+    |> List.first()
   end
 
   def get_operator, do: get(@key_mac_string, "UNKNOWN")
