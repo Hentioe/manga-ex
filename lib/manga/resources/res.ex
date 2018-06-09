@@ -68,6 +68,12 @@ defmodule Manga.Res do
         name: "漫画台",
         origin: Manga.Res.MHTOrigin,
         url: "http://www.manhuatai.com"
+      ),
+    gfmhw:
+      Platform.create(
+        name: "古风漫画网",
+        origin: Manga.Res.GFMHWOrigin,
+        url: "http://www.gufengmh.com"
       )
   ]
 
@@ -127,6 +133,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.manhuatai\.com/.+/.+\.html$}i,
       type: {:fetch, :mht}
+    ],
+    [
+      pattern: ~r{https?://www\.gufengmh\.com/manhua/[^\/]+/?$}i,
+      type: {:stages, :gfmhw}
+    ],
+    [
+      pattern: ~r{https?://www\.gufengmh\.com/manhua/[^\/]+/\d+\.html$}i,
+      type: {:fetch, :gfmhw}
     ]
   ]
 

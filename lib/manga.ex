@@ -27,7 +27,7 @@ defmodule Manga do
   use Manga.Res, :models
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-4"
+  @version "alpha9-5"
 
   def main(args \\ []) do
     switches = [
