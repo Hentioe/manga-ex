@@ -38,6 +38,7 @@ defmodule Manga.Res.EpubTpl do
   def stylesheet do
     ~s/.album {
         padding: 0;
+        margin: 0;
         text-align:center;
       }
       .albumimg {
@@ -82,7 +83,7 @@ defmodule Manga.Res.EpubTpl do
     |> EEx.eval_string(img_count: img_count)
   end
 
-  def metadata_opf(title, img_count) when is_integer(img_count) do
+  def metadata_opf(title, plist) when is_list(plist) do
     uuid = UUID.uuid4()
 
     ~s{<?xml version="1.0"  encoding="UTF-8"?>
@@ -103,21 +104,21 @@ defmodule Manga.Res.EpubTpl do
         <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
         <item href="stylesheet.css" id="id33" media-type="text/css"/>
         <item href="start.xhtml" id="start" media-type="application/xhtml+xml"/>
-    <%= for i <- 1..img_count do %>
-        <item href="<%= i %>.xhtml" id="page<%= i %>" media-type="application/xhtml+xml"/>
-        <item href="<%= i %>.jpg" id="img<%= i %>" media-type="image/jpeg"/>
+    <%= for p <- plist do %>
+        <item href="<%= p.p %>.xhtml" id="page<%= p.p %>" media-type="application/xhtml+xml"/>
+        <item href="<%= p.p %>.<%= p.suffix %>" id="img<%= p.p %>" media-type="<%= p.img_mime %>"/>
     <% end %>
-        <item href="cover.jpg" id="cover" media-type="image/jpeg"/>
+        <item href="cover.<%= Enum.at(plist, 0).suffix %>" id="cover" media-type="<%= Enum.at(plist, 0).img_mime %>"/>
       </manifest>
       <spine toc="ncx">
         <itemref idref="start"/>
-    <%= for i <- 1..img_count do %>
+    <%= for i <- 1..length(plist) do %>
         <itemref idref="page<%= i %>"/>
     <% end %>
       </spine>
       <guide/>
     </package>}
-    |> EEx.eval_string(img_count: img_count)
+    |> EEx.eval_string(plist: plist)
   end
 
   def container_xml do

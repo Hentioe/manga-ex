@@ -1,3 +1,4 @@
-/_res
-/manga
-/*.zip
+*
+!manga.bat
+!manga.ps1
+!.gitignore

@@ -19,20 +19,21 @@ defmodule Manga.Res.EpubExport do
     stage.plist
     |> Enum.each(fn page ->
       "#{cache_dir}/#{page.p}.xhtml"
-      |> File.write(img_xhtml("#{page.p}.jpg"))
+      |> File.write(img_xhtml("#{page.p}.#{page.suffix}"))
 
-      "_res/assets/#{stage.name}/#{page.p}.jpg"
-      |> File.copy("#{cache_dir}/#{page.p}.jpg")
+      "_res/assets/#{stage.name}/#{page.p}.#{page.suffix}"
+      |> File.copy("#{cache_dir}/#{page.p}.#{page.suffix}")
     end)
 
-    # 复制第一张图为 cover.jpg
-    cover_source_file = "#{cache_dir}/1.jpg"
-    cover_file = "#{cache_dir}/cover.jpg"
+    # 复制第一张图为 cover
+    cover_suffix = Enum.at(stage.plist, 0).suffix
+    cover_source_file = "#{cache_dir}/1.#{cover_suffix}"
+    cover_file = "#{cache_dir}/cover.#{cover_suffix}"
     File.copy(cover_source_file, cover_file)
 
     # 写入 metadata.opf
     metadata_opf_file = "#{cache_dir}/metadata.opf"
-    File.write(metadata_opf_file, metadata_opf(stage.name, length(stage.plist)))
+    File.write(metadata_opf_file, metadata_opf(stage.name, stage.plist))
 
     # 写入 mimetype
     mimetype_file = "#{cache_dir}/mimetype"
@@ -69,7 +70,7 @@ defmodule Manga.Res.EpubExport do
           "#{i}.xhtml"
         end) ++
         Enum.map(1..length(stage.plist), fn i ->
-          "#{i}.jpg"
+          "#{i}.#{Enum.at(stage.plist, i - 1).suffix}"
         end)
 
     files = files |> Enum.map(&String.to_charlist(&1))
