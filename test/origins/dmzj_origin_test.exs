@@ -20,10 +20,10 @@ defmodule Manga.Res.DMZJOriginTest do
   # end
 
   test "stages" do
-    {state, result} = stages(Info.create(url: "https://manhua.dmzj.com/yjdwbwzbzgj"))
+    {state, result} = stages(Info.create(url: "https://manhua.dmzj.com/yiquanchaoren"))
     send(self(), state)
     assert_received :ok, result
-    assert length(result.stage_list) == 13
+    assert length(result.stage_list) == 364
   end
 
   test "fetch" do

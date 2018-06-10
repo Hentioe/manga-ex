@@ -67,7 +67,7 @@ defmodule Manga.Res.DMZJOrigin do
 
       list =
         html
-        |> Floki.find(".cartoon_online_border > ul > li > a")
+        |> Floki.find(".middleright_mr > div > ul > li > a[title]")
         |> Enum.map(fn linkNode ->
           Stage.create(
             name: Floki.text(linkNode),
