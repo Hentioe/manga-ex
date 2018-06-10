@@ -91,3 +91,9 @@ PS: Node.js 是一个 Javascipt 运行环境。与 Calibre 不同的是，前者
 - [x] 更多的资源来源支持
 - [ ] 针对 Windows 去掉输出的 ANSI 颜色（不兼容）
 - [ ] 读取配置文件启动任务
+
+## TODO(1.0-RELEASE)
+
+- [ ] v1.1: 增强导出选项
+- [ ] v1.2: 混合搜索功能
+- [ ] v1.3: 发送至 Kindle
