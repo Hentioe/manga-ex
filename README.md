@@ -24,7 +24,7 @@ PS: 如果你从 [RELEASE](https://github.com/Hentioe/manga.ex/releases) 页面�
 当前 Manga.ex 支持 9 个以上的漫画平台，下面会列举出来。不过我从来不吝啬多支持几个(暂时只接受 Web 在线网站，不接受 APP)，所以欢迎你向我提交你想支持的网站 :)
 
 
-Manga.ex 导出格式有三种，分别是 EPUB/MOBI/PDF，其中 EPUB 是基本格式，被直接支持。而 MOBI 和 PDF 需要安装 [Calibre](https://calibre-ebook.com/download) 在基础格式 EPUB 资源模板的基础上进行转换。
+Manga.ex 导出格式有三种，分别是 EPUB/MOBI/PDF，其中 EPUB 是基本格式，被直接支持。而 MOBI 和 PDF 需要安装 [Calibre](https://calibre-ebook.com/download) 在基本格式 EPUB 资源模板的基础上进行转换。
 
 PS: Calibre 是一个开源的电子书工具箱， Manga.ex 和 Calibre 的交互对用户而言是透明的。
 
