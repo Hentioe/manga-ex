@@ -77,18 +77,18 @@ defmodule Manga.Res.XXMHWOrigin do
         |> (&Regex.scan(~r{<script type="text/javascript">[\s\n]+(eval.+)[\s\n]+</script>}i, &1)).()
         |> List.first()
         |> List.last()
-        |> (fn script -> ~s|#{script}\nconsole.log(`"${msg}"`)| end).()
+        |> (fn script -> ~s|#{script}\nconsole.log(`[msg: "${msg}", img_s: "${img_s}"]`)| end).()
 
       case eval_to_elixir_result(script) do
-        {:ok, list_str} ->
+        {:ok, [msg: msg, img_s: img_s]} ->
           plist =
-            list_str
+            msg
             |> String.split("|")
             |> Enum.with_index()
             |> Enum.map(fn {path, i} ->
               Page.create(
                 p: i + 1,
-                url: "https://hws.readingbox.net/h57/" <> path,
+                url: "https://hws.readingbox.net/h#{img_s}/" <> path,
                 http_headers: [
                   Referer: stage.url
                 ]

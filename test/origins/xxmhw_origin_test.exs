@@ -21,10 +21,10 @@ defmodule Manga.Res.XXMHWOriginTest do
   end
 
   test "fetch" do
-    {state, result} = fetch(Stage.create(url: "https://www.177mh.net/201806/389910.html"))
+    {state, result} = fetch(Stage.create(url: "https://www.177mh.net/201611/344894.html"))
     assert state == :ok
     assert result.name != nil
     assert is_list(result.plist)
-    assert length(result.plist) == 33
+    assert length(result.plist) == 30
   end
 end
