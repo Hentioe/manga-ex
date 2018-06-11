@@ -12,6 +12,13 @@ defmodule Manga.Utils.HTTPClient do
   ]
 
   def get(url, options \\ @default_options) do
+    options =
+      if options != @default_options do
+        Keyword.merge(@default_options, options)
+      else
+        @default_options
+      end
+
     HP.get(url, options)
   end
 end

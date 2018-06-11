@@ -21,12 +21,6 @@ defmodule Manga.Res do
         origin: Manga.Res.DMZJOrigin,
         url: "https://manhua.dmzj.com"
       ),
-    fzdm:
-      Platform.create(
-        name: "风之动漫",
-        origin: Manga.Res.FZDMOrigin,
-        url: "https://www.fzdm.com"
-      ),
     # dmk:
     #   Platform.create(
     #     name: "動漫狂",
@@ -44,6 +38,12 @@ defmodule Manga.Res do
         name: "动漫屋",
         origin: Manga.Res.DM5Origin,
         url: "http://www.dm5.com"
+      ),
+    mhr:
+      Platform.create(
+        name: "漫画人",
+        origin: Manga.Res.MHROrigin,
+        url: "http://www.manhuaren.com"
       ),
     # kkmh:
     # Platform.create(
@@ -80,6 +80,12 @@ defmodule Manga.Res do
         name: "汗汗漫画",
         origin: Manga.Res.HHMHOrigin,
         url: "http://www.hhmmoo.com"
+      ),
+    fzdm:
+      Platform.create(
+        name: "风之动漫",
+        origin: Manga.Res.FZDMOrigin,
+        url: "https://www.fzdm.com"
       )
   ]
 
@@ -155,6 +161,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.hhmmoo\.com/page\d+/\d+\.html\?}i,
       type: {:fetch, :hhmh}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuaren\.com/manhua-[^\/]+/?$}i,
+      type: {:stages, :mhr}
+    ],
+    [
+      pattern: ~r{https?://www\.manhuaren\.com/m\d+/?$}i,
+      type: {:fetch, :mhr}
     ]
   ]
 
