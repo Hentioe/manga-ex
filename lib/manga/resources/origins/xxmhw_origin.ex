@@ -58,7 +58,7 @@ defmodule Manga.Res.XXMHWOrigin do
         Info.update_stage_list(info, list)
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
-      {:ok, info}
+      {:ok, info |> Info.reverse_stage_list()}
     else
       {:error, resp |> HCR.error_msg("Stages:#{info.name}")}
     end
