@@ -3,6 +3,7 @@ defmodule Manga.Res.KKDMOrigin do
   alias Manga.Model.Info
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
+
   def index(more \\ 1) do
     url = "http://comic.kukudm.com/comictype/3_#{more}.htm"
 

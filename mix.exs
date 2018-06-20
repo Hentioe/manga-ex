@@ -31,11 +31,11 @@ defmodule Manga.MixProject do
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:httpotion, "~> 3.1"},
       {:floki, "~> 0.20.2"},
-      {:download, git: "https://github.com/Hentioe/download.ex.git", tag: "0.0.5"},
+      {:download, github: "Hentioe/download.ex", tag: "0.0.5"},
       {:uuid, "~> 1.1"},
       {:progress_bar, "~> 1.6"},
-      {:tabula, "~> 2.2"}
-      # {:elixir_mbcs, github: "woxtu/elixir-mbcs", tag: "0.1.3"}
+      {:tabula, "~> 2.2"},
+      {:elixir_mbcs, github: "Hentioe/elixir-mbcs"}
     ]
   end
 end

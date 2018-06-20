@@ -27,5 +27,4 @@ defmodule Manga.Utils.DownloaderTest do
   #   assert is_list(r)
   #   assert length(r) > 0
   # end
-
 end

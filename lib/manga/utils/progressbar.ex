@@ -5,6 +5,7 @@ defmodule Manga.Utils.ProgressBar do
 
   def render_fetch(name, cur, tot) do
     name = if name == nil, do: "???", else: name
+
     format = [
       left: [IO.ANSI.magenta(), "FETCHING: [#{name}]", IO.ANSI.reset(), " |"]
     ]
@@ -16,6 +17,7 @@ defmodule Manga.Utils.ProgressBar do
     format = [
       left: [IO.ANSI.magenta(), "DOWNLOAD: [#{name}]", IO.ANSI.reset(), " |"]
     ]
+    
 
     render(cur, tot, format)
   end

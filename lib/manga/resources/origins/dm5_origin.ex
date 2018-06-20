@@ -45,7 +45,12 @@ defmodule Manga.Res.DM5Origin do
         |> Floki.find("ul > li > a[title]")
         |> Enum.map(fn linkNode ->
           Stage.create(
-            name: Floki.text(linkNode),
+            name:
+              Floki.raw_html(linkNode)
+              |> (&Regex.scan(~r|\>(.+)\<span\>|, &1)).()
+              |> List.first()
+              |> List.last()
+              |> String.trim(),
             url: "http://www.dm5.com" <> (Floki.attribute(linkNode, "href") |> List.first())
           )
         end)
@@ -58,7 +63,7 @@ defmodule Manga.Res.DM5Origin do
         Info.update_stage_list(info, list)
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
-      {:ok, info}
+      {:ok, info |> Info.reverse_stage_list()}
     else
       {:error, resp |> HCR.error_msg("Stages: #{info.name}")}
     end
