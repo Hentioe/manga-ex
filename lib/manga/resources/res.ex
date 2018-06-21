@@ -169,6 +169,14 @@ defmodule Manga.Res do
     [
       pattern: ~r{https?://www\.manhuaren\.com/m\d+/?$}i,
       type: {:fetch, :mhr}
+    ],
+    [
+      pattern: ~r|https?://www\.cartoonmad\.com/comic/\d{15,}\.html|i,
+      type: {:fetch, :dmk}
+    ],
+    [
+      pattern: ~r|https?://www\.cartoonmad\.com/comic/\d+\.html|i,
+      type: {:stages, :dmk}
     ]
   ]
 

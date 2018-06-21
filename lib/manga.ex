@@ -28,7 +28,7 @@ defmodule Manga do
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-13"
+  @version "alpha9-14"
 
   def main(args \\ []) do
     case passed() do
@@ -109,6 +109,7 @@ defmodule Manga do
   end
 
   def action(:intellig, url: url) do
+
     export(url)
   end
 
