@@ -17,7 +17,6 @@ defmodule Manga.Utils.ProgressBar do
     format = [
       left: [IO.ANSI.magenta(), "DOWNLOAD: [#{name}]", IO.ANSI.reset(), " |"]
     ]
-    
 
     render(cur, tot, format)
   end

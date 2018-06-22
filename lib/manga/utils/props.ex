@@ -1,17 +1,28 @@
 defmodule Manga.Utils.Props do
-  import Manga.Utils.Printer
-  use Agent
+  import Manga.Utils.{Printer}
 
+  @table :props
   @key_mac_string "mac_string"
-  def start_link(_opts) do
-    props = %{
-      @key_mac_string => get_mac_string()
-    }
+  @key_more "more_count"
+  @key_fetch_delay "fetch_delay"
+  @key_download_delay "download_delay"
 
-    Agent.start_link(fn -> props end, name: __MODULE__)
+  def init_table do
+    :ets.new(@table, [:named_table])
+    put(@key_mac_string, get_mac_string())
   end
 
-  @key_more "more_count"
+  def put(name, value) do
+    :ets.insert(@table, {name, value})
+  end
+
+  def get(name, default \\ nil) when is_binary(name) do
+    case :ets.lookup(@table, name) do
+      [{^name, value}] -> value
+      [] -> default
+    end
+  end
+
   def init_more(module) do
     put(@key_more, {module, 0})
   end
@@ -28,19 +39,7 @@ defmodule Manga.Utils.Props do
     end
   end
 
-  defp put(name, value) do
-    Agent.update(__MODULE__, fn props -> Map.put(props, name, value) end)
-  end
-
-  def get(name, default \\ nil) when is_binary(name) do
-    Agent.get(__MODULE__, fn props -> Map.get(props, name, default) end)
-  end
-
-  def get_all do
-    Agent.get(__MODULE__, fn props -> props end)
-  end
-
-  defp set_number(key, value, default \\ 0) do
+  def set_number(key, value, default \\ 0) do
     value = if value == nil, do: 0, else: value
 
     if !is_integer(value) do
@@ -57,7 +56,7 @@ defmodule Manga.Utils.Props do
     end
   end
 
-  defp get_number(key, default \\ 0) do
+  def get_number(key, default \\ 0) do
     case get(key) do
       nil -> default
       v -> v
@@ -112,14 +111,12 @@ defmodule Manga.Utils.Props do
     |> List.first()
   end
 
-  def get_operator, do: get(@key_mac_string, "UNKNOWN")
+  def get_operator, do: get(@key_mac_string, "UnKnown")
 
-  @key_fetch_delay "fetch_delay"
   def set_fetch_delay(millisecond), do: set_number(@key_fetch_delay, millisecond)
 
   def get_fetch_delay, do: get_number(@key_fetch_delay)
 
-  @key_download_delay "download_delay"
   def set_download_delay(millisecond), do: set_number(@key_download_delay, millisecond)
 
   def get_download_delay, do: get_number(@key_download_delay)

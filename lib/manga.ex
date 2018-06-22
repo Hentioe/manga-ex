@@ -1,9 +1,6 @@
 defmodule Manga do
-  use Application
-
   import Manga.Res
-  import Manga.Utils.Printer
-  import Manga.Utils.ProgressBar
+  import Manga.Utils.{Printer, ProgressBar}
   alias Manga.Utils.Props
   use Tabula
 
@@ -109,7 +106,6 @@ defmodule Manga do
   end
 
   def action(:intellig, url: url) do
-
     export(url)
   end
 
@@ -227,6 +223,8 @@ defmodule Manga do
   end
 
   defp passed do
+    Props.init_table()
+
     cond do
       !install_node?() ->
         {:error, "Please install Node.js: https://nodejs.org"}
@@ -244,9 +242,5 @@ defmodule Manga do
   defp print_version do
     print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
     print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version()})")
-  end
-
-  def start(_type, _args) do
-    Props.start_link(%{})
   end
 end

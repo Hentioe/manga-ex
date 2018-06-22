@@ -21,12 +21,6 @@ defmodule Manga.Res do
         origin: Manga.Res.DMZJOrigin,
         url: "https://manhua.dmzj.com"
       ),
-    dmk:
-      Platform.create(
-        name: "動漫狂",
-        origin: Manga.Res.DMKOrigin,
-        url: "http://www.cartoonmad.com"
-      ),
     mhg:
       Platform.create(
         name: "漫画柜",
@@ -44,6 +38,12 @@ defmodule Manga.Res do
         name: "漫画人",
         origin: Manga.Res.MHROrigin,
         url: "http://www.manhuaren.com"
+      ),
+    dmk:
+      Platform.create(
+        name: "動漫狂",
+        origin: Manga.Res.DMKOrigin,
+        url: "http://www.cartoonmad.com"
       ),
     # kkmh:
     # Platform.create(
