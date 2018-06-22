@@ -25,7 +25,7 @@ defmodule Manga do
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
 
-  @version "alpha9-14"
+  @version "alpha9-15"
 
   def main(args \\ []) do
     case passed() do
@@ -43,7 +43,7 @@ defmodule Manga do
     switches = [
       version: :boolean,
       help: :boolean,
-      delay: :lists
+      delay: :string
     ]
 
     aliases = [

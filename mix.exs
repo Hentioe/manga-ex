@@ -35,7 +35,7 @@ defmodule Manga.MixProject do
       {:uuid, "~> 1.1"},
       {:progress_bar, "~> 1.6"},
       {:tabula, "~> 2.2"},
-      {:elixir_mbcs, github: "Hentioe/elixir-mbcs"}
+      {:elixir_mbcs, github: "Hentioe/elixir-mbcs", tag: "0.1.4"}
     ]
   end
 end
