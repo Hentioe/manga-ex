@@ -8,11 +8,20 @@ defmodule Mix.Tasks.Bundle do
         File.cp!("manga", "scripts/manga")
         File.rm!("manga")
 
+        archive_name = "./scripts/manga_#{Manga.version()}"
+        files = ["manga", "manga.ps1", "manga.bat"]
         :zip.create(
-          "./scripts/manga_#{Manga.version()}.zip",
-          ['manga', 'manga.ps1', 'manga.bat'],
+          archive_name <> ".zip",
+          files |> Enum.map(fn f -> to_charlist(f) end),
           cwd: "./scripts"
         )
+        |> IO.inspect()
+
+        :erl_tar.create(
+          archive_name <> ".tar.gz",
+          files |> Enum.map(fn f -> "#{Path.absname("")}/scripts/#{f}" |> to_charlist() end)
+        )
+        |> (fn r -> if r == :ok, do: {:ok, archive_name <> ".tar.gz"}, else: r end).()
         |> IO.inspect()
 
       {output, error_code} ->
