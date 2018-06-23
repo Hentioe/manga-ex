@@ -9,7 +9,7 @@ Online comic offline export tool, implemented using Elixir!
 
 需要注意的是，这是一个使用 Elixir 实现的项目。它的运行需要依赖 [Erlang]()，就像 Java 软件需要 JRE 那样 :)
 
-PS: 如果你从 [RELEASE](https://github.com/Hentioe/manga.ex/releases) 页面下载使用本软件，请务必安装 20 或以上的 Erlang/OTP 版本。
+PS: 如果你从 [RELEASE](https://github.com/Hentioe/manga.ex/releases) 页面下载使用本软件，请务必安装 21.0 或以上的 Erlang/OTP 版本。
 
 ## 演示
 
