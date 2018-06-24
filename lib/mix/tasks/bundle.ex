@@ -10,6 +10,7 @@ defmodule Mix.Tasks.Bundle do
 
         archive_name = "./scripts/manga_#{Manga.version()}"
         files = ["manga", "manga.ps1", "manga.bat"]
+
         :zip.create(
           archive_name <> ".zip",
           files |> Enum.map(fn f -> to_charlist(f) end),
