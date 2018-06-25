@@ -1,6 +1,5 @@
 defmodule Manga.HttpClient do
-  use Application
-  alias Manga.HttpClient.{Sup, Fetcher}
+  alias Manga.HttpClient.{Worker}
 
   @default_user_agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
   @default_options [
@@ -10,12 +9,6 @@ defmodule Manga.HttpClient do
       "User-Agent": @default_user_agent
     ]
   ]
-  def start(_type, _args) do
-    case Sup.start_link() do
-      {:ok, pid} -> {:ok, pid}
-      other -> {:error, other}
-    end
-  end
 
   def get(url, options \\ @default_options) do
     options =
@@ -25,7 +18,7 @@ defmodule Manga.HttpClient do
         @default_options
       end
 
-    {:ok, pid} = Fetcher.create(url, options)
-    Fetcher.get(pid, url, options)
+    {:ok, pid} = Worker.create(url, options)
+    Worker.get(pid, url, options)
   end
 end

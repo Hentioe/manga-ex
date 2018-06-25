@@ -1,8 +1,7 @@
-defmodule Manga.HttpClient.Fetcher do
+defmodule Manga.HttpClient.Worker do
   use GenServer
-  alias Manga.HttpClient.{Sup}
 
-  def start_link(url, opts) do
+  def start_link({url, opts}) do
     GenServer.start_link(__MODULE__, [url, opts])
   end
 
@@ -11,7 +10,8 @@ defmodule Manga.HttpClient.Fetcher do
   end
 
   def create(url, options) do
-    Sup.start_child(url, options)
+    child_spec = {Manga.HttpClient.Worker, {url, options}}
+    DynamicSupervisor.start_child(Manga.HttpClient.Supervisor, child_spec)
   end
 
   def get(pid, url, options) do
