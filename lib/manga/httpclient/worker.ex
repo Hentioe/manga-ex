@@ -10,7 +10,12 @@ defmodule Manga.HttpClient.Worker do
   end
 
   def create(url, options) do
-    child_spec = {Manga.HttpClient.Worker, {url, options}}
+    child_spec =
+      Supervisor.child_spec(
+        {Manga.HttpClient.Worker, {url, options}},
+        restart: :transient
+      )
+
     DynamicSupervisor.start_child(Manga.HttpClient.Supervisor, child_spec)
   end
 
@@ -20,6 +25,6 @@ defmodule Manga.HttpClient.Worker do
 
   def handle_cast({:get, {url, options, from}}, state) do
     send(from, {:fetched, {url, HTTPotion.get(url, options)}})
-    {:noreply, state}
+    {:stop, :normal, state}
   end
 end
