@@ -1,6 +1,7 @@
 defmodule Manga.HttpClient do
   alias Manga.HttpClient.{Worker}
 
+  @table_id :reque
   @default_user_agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
   @default_options [
     follow_redirects: true,
@@ -21,4 +22,6 @@ defmodule Manga.HttpClient do
     {:ok, pid} = Worker.create(url, options)
     Worker.get(pid, url, options)
   end
+
+  def table_id, do: @table_id
 end
