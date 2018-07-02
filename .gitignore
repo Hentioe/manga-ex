@@ -24,3 +24,6 @@ erl_crash.dump
 /view.html
 /test.js
 /_res/
+
+/.idea/
+*.iml
