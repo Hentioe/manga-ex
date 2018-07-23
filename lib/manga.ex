@@ -3,24 +3,6 @@ defmodule Manga do
   import Manga.Utils.{Printer, ProgressBar}
   alias Manga.Utils.Props
   use Tabula
-
-  @moduledoc """
-  Documentation for Manga.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Manga.hello
-      :world
-
-  """
-  def hello do
-    :world
-  end
-
   use Manga.Res, :models
   import Manga.Utils.Checker
   alias Manga.Utils.IOUtils
