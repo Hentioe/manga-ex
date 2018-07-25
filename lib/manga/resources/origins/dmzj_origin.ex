@@ -1,8 +1,6 @@
 defmodule Manga.Res.DMZJOrigin do
-  @behaviour Manga.Res.Origin
-  alias Manga.Model.Info
-  alias Manga.Model.Stage
-  alias Manga.Model.Page
+  use Manga.Res.Origin
+  use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
   import Manga.Utils.Printer

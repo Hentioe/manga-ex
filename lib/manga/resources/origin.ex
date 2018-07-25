@@ -1,4 +1,10 @@
 defmodule Manga.Res.Origin do
+  defmacro __using__(_witch) do
+    quote do
+      @behaviour __MODULE__
+    end
+  end
+
   @callback index(String.t()) :: {:ok, [Manga.Model.Info.t()]} | {:error, String.t()}
   @callback search(String.t()) :: {:ok, [Manga.Model.Info.t()]} | {:error, String.t()}
   @callback stages(Manga.Model.Info.t()) :: {:ok, Manga.Model.Info.t()} | {:error, String.t()}

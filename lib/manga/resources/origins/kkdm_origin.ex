@@ -1,6 +1,6 @@
 defmodule Manga.Res.KKDMOrigin do
-  @behaviour Manga.Res.Origin
-  alias Manga.Model.Info
+  use Manga.Res.Origin
+  use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
 
