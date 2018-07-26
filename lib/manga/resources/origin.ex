@@ -1,7 +1,7 @@
 defmodule Manga.Res.Origin do
   defmacro __using__(_witch) do
     quote do
-      @behaviour __MODULE__
+      @behaviour Manga.Res.Origin
     end
   end
 
