@@ -1,22 +1,18 @@
 defmodule Manga do
   import Manga.Res
-  import Manga.Utils.{Printer, ProgressBar}
-  alias Manga.Utils.Props
+  alias Manga.Utils.{Printer, ProgressBar, Props, Checker, IOUtils}
   use Tabula
   use Manga.Res, :models
-  import Manga.Utils.Checker
-  alias Manga.Utils.IOUtils
-
   @version "alpha9-15"
 
   def main(args \\ []) do
     case passed() do
       {:error, msg} ->
-        print_error(msg)
+        Printer.print_error(msg)
         System.halt(1)
 
       {:warning, msg} ->
-        print_warning(msg)
+        Printer.print_warning(msg)
 
       _ ->
         nil
@@ -61,14 +57,14 @@ defmodule Manga do
 
   def action(:default) do
     # 交互模式
-    print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
+    Printer.print_normal("Welcome to Manga.ex! Currently supported platform list:\n")
 
     list =
       get_platforms()
       |> Enum.map(fn {_, platform} -> platform end)
       |> Enum.with_index()
       |> Enum.map(fn {platform, i} ->
-        print_result(
+        Printer.print_result(
           "[#{i + 1}]: #{platform.name}#{
             if platform.flags == nil, do: "", else: "(#{platform.flags})"
           }"
@@ -94,12 +90,12 @@ defmodule Manga do
   defp index(p) do
     case p.origin.index(Props.get_and_more()) do
       {:ok, list} ->
-        newline()
+        Printer.newline()
 
         list
         |> Enum.with_index()
         |> Enum.each(fn {manga_info, i} ->
-          print_result("[#{i + 1}]: #{manga_info.name}")
+          Printer.print_result("[#{i + 1}]: #{manga_info.name}")
         end)
 
         case IOUtils.gets_number("\n[Number -> select a manga] or [Anything -> next page]: ") do
@@ -108,7 +104,7 @@ defmodule Manga do
         end
 
       {:error, error} ->
-        print_error(error)
+        Printer.print_error(error)
     end
   end
 
@@ -116,7 +112,7 @@ defmodule Manga do
     case platform?(url) do
       # 待选择的(话/卷)列表
       {:stages, key} ->
-        newline()
+        Printer.newline()
 
         case get_platform(key).origin.stages(Info.create(url: url)) do
           {:ok, manga_info} ->
@@ -124,7 +120,7 @@ defmodule Manga do
               manga_info.stage_list
               |> Enum.with_index()
               |> Enum.map(fn {stage, i} ->
-                print_result("[#{i + 1}]: #{stage.name}")
+                Printer.print_result("[#{i + 1}]: #{stage.name}")
                 stage
               end)
 
@@ -132,7 +128,7 @@ defmodule Manga do
             |> Enum.each(fn n -> Enum.at(list, n - 1).url |> export() end)
 
           {:error, error} ->
-            print_error(error)
+            Printer.print_error(error)
         end
 
       # 获取漫画内容（下载并保存）
@@ -144,17 +140,17 @@ defmodule Manga do
                   stage = Stage.set_platform(stage, get_platform(key))
                   converter_list = get_converter_list()
                   render_length = length(converter_list)
-                  render_export(stage.name, 0, render_length)
+                  ProgressBar.render_export(stage.name, 0, render_length)
 
                   converter_list
                   |> Enum.with_index()
                   |> Enum.map(fn {{format, converter}, i} ->
                     r = converter.save_from_stage(stage)
-                    render_export(stage.name, i + 1, render_length)
+                    ProgressBar.render_export(stage.name, i + 1, render_length)
                     {format, r}
                   end)
                 end).() do
-          newline()
+          Printer.newline()
           # 输出结果
 
           rlist
@@ -170,11 +166,11 @@ defmodule Manga do
           |> print_table
         else
           {:error, error} ->
-            print_error(error)
+            Printer.print_error(error)
         end
 
       {:error, error} ->
-        print_error(error)
+        Printer.print_error(error)
     end
   end
 
@@ -199,7 +195,7 @@ defmodule Manga do
   defp get_converter_list do
     converts = [{"EPUB", Manga.Res.EpubExport}]
 
-    if install_converter?(),
+    if Checker.install_converter?(),
       do: converts ++ [{"MOBI", Manga.Res.MobiExport}, {"PDF", Manga.Res.PdfExport}],
       else: converts
   end
@@ -208,10 +204,10 @@ defmodule Manga do
     Props.init_table()
 
     cond do
-      !install_node?() ->
+      !Checker.install_node?() ->
         {:error, "Please install Node.js: https://nodejs.org"}
 
-      !install_converter?() ->
+      !Checker.install_converter?() ->
         {:warning, "Missing conversion tools will limit the output format!"}
 
       true ->
@@ -222,7 +218,7 @@ defmodule Manga do
   def version, do: @version
 
   defp print_version do
-    print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
-    print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version()})")
+    Printer.print_normal("Erlang/OPT #{:erlang.system_info(:otp_release)} [#{get_system_info()}]")
+    Printer.print_normal("Manga.ex #{@version} (compiled with Elixir #{System.version()})")
   end
 end

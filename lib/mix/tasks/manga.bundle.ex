@@ -5,22 +5,22 @@ defmodule Mix.Tasks.Manga.Bundle do
     case System.cmd("mix", ["escript.build"]) do
       {output, 0} ->
         IO.puts(output)
-        File.cp!("manga", "scripts/manga")
+        File.cp!("manga", "dist/manga")
         File.rm!("manga")
 
-        archive_name = "./scripts/manga_#{Manga.version()}"
+        archive_name = "./dist/manga_#{Manga.version()}"
         files = ["manga", "manga.ps1", "manga.bat"]
 
         :zip.create(
           archive_name <> ".zip",
           files |> Enum.map(fn f -> to_charlist(f) end),
-          cwd: "./scripts"
+          cwd: "./dist"
         )
         |> IO.inspect()
 
         :erl_tar.create(
           archive_name <> ".tar.gz",
-          files |> Enum.map(fn f -> "#{Path.absname("")}/scripts/#{f}" |> to_charlist() end)
+          files |> Enum.map(fn f -> "#{Path.absname("")}/dist/#{f}" |> to_charlist() end)
         )
         |> (fn r -> if r == :ok, do: {:ok, archive_name <> ".tar.gz"}, else: r end).()
         |> IO.inspect()
