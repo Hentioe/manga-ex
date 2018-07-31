@@ -6,10 +6,12 @@ defmodule Manga.Utils.Props do
   @key_more "more_count"
   @key_fetch_delay "fetch_delay"
   @key_download_delay "download_delay"
+  @key_os_type "os_type"
 
   def init_table do
     :ets.new(@table, [:named_table])
     put(@key_mac_string, get_mac_string())
+    put(@key_os_type, get_os_type())
   end
 
   def put(name, value) do
@@ -111,6 +113,11 @@ defmodule Manga.Utils.Props do
     |> List.first()
   end
 
+  defp get_os_type do
+    {_, name} = :os.type()
+    name
+  end
+
   def get_operator, do: get(@key_mac_string, "UnKnown")
 
   def set_fetch_delay(millisecond), do: set_number(@key_fetch_delay, millisecond)
@@ -120,4 +127,6 @@ defmodule Manga.Utils.Props do
   def set_download_delay(millisecond), do: set_number(@key_download_delay, millisecond)
 
   def get_download_delay, do: get_number(@key_download_delay)
+
+  def get_os_name, do: get(@key_os_type, :unknow_os)
 end
