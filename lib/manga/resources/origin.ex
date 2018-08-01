@@ -2,6 +2,9 @@ defmodule Manga.Res.Origin do
   defmacro __using__(_witch) do
     quote do
       @behaviour Manga.Res.Origin
+      def newline do
+        Manga.Printer.get_current_printer().newline()
+      end
     end
   end
 

@@ -1,5 +1,6 @@
 defmodule Manga.Utils.Props do
-  import Manga.Utils.{Printer}
+
+  alias Manga.{Printer}
 
   @table :props
   @key_mac_string "mac_string"
@@ -50,7 +51,7 @@ defmodule Manga.Utils.Props do
           put(key, n)
 
         {:error} ->
-          print_warning("[props:#{key}] is not a number")
+          Printer.get_current_printer().echo_warning("[props:#{key}] is not a number")
           put(key, default)
       end
     else

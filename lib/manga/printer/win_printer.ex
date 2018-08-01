@@ -13,11 +13,11 @@ defmodule Manga.Printer.WindowsPrinter do
     text
   end
 
-  def gen_error_text(text) do
-    text
+  def gen_error_text(error) do
+    "[Error] #{error}"
   end
 
   def gen_warning_text(text) do
-    text
+    "[Warning] #{text}"
   end
 end

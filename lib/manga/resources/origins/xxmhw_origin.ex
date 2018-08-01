@@ -3,7 +3,6 @@ defmodule Manga.Res.XXMHWOrigin do
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
-  import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
   import Manga.Utils.JsRuntime
 

@@ -3,7 +3,7 @@ defmodule Manga do
   alias Manga.Utils.{ProgressBar, Props, Checker, IOUtils}
   use Tabula
   use Manga.Res, :models
-  @version "alpha9-15"
+  @version "alpha10-0"
 
   def main(args \\ []) do
     case passed() do

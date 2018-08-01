@@ -5,7 +5,6 @@ defmodule Manga.Res.MHGOrigin do
   alias Manga.Utils.HTTPClient.Response, as: HCR
   alias Manga.Utils.JsRuntime
   import Manga.Utils.ProgressBar
-  import Manga.Utils.Printer
 
   def index(_more) do
     url = "https://www.manhuagui.com/rank/japan.html"

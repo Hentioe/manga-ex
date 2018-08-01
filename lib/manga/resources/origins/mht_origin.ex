@@ -3,7 +3,7 @@ defmodule Manga.Res.MHTOrigin do
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
-  import Manga.Utils.{Printer, ProgressBar, JsRuntime}
+  import Manga.Utils.{ProgressBar, JsRuntime}
 
   def index(more \\ 1) do
     url = "http://www.manhuatai.com/all_p#{more}.html"

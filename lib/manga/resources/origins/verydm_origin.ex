@@ -3,7 +3,6 @@ defmodule Manga.Res.VeryDMOrigin do
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
-  import Manga.Utils.Printer
   import Manga.Utils.ProgressBar
 
   def index(more \\ 1) do
