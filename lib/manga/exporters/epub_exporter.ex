@@ -1,5 +1,5 @@
 defmodule Manga.Res.EpubExporter do
-  use Manga.Res.Exporter
+  use Manga.Exporter
 
   import Manga.Utils.IOUtils
   import Manga.Res.EpubTpl

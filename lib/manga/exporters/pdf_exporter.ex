@@ -1,5 +1,5 @@
 defmodule Manga.Res.PdfExporter do
-  use Manga.Res.Exporter
+  use Manga.Exporter
 
   def save_from_stage(stage) do
     epub_file = "./_res/EPUBs/#{stage.name}.epub"

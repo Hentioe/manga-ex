@@ -1,8 +1,8 @@
-defmodule Manga.Res.Exporter do
+defmodule Manga.Exporter do
 
   defmacro __using__(_otps) do
     quote do
-      @behaviour Manga.Res.Exporter
+      @behaviour Manga.Exporter
     end
   end
 
