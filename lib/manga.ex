@@ -3,7 +3,7 @@ defmodule Manga do
   alias Manga.Utils.{ProgressBar, Props, Checker, IOUtils}
   use Tabula
   use Manga.Res, :models
-  @version "alpha10-0"
+  @version "alpha10-1"
 
   def main(args \\ []) do
     case passed() do
@@ -200,10 +200,10 @@ defmodule Manga do
   end
 
   defp get_converter_list do
-    converts = [{"EPUB", Manga.Res.EpubExport}]
+    converts = [{"EPUB", Manga.Res.EpubExporter}]
 
     if Checker.install_converter?(),
-      do: converts ++ [{"MOBI", Manga.Res.MobiExport}, {"PDF", Manga.Res.PdfExport}],
+      do: converts ++ [{"MOBI", Manga.Res.MobiExporter}, {"PDF", Manga.Res.PdfExporter}],
       else: converts
   end
 

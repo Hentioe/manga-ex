@@ -21,6 +21,10 @@ defmodule Manga.Printer do
         print(line <> "\n")
       end
 
+      defp print_to_error(text) do
+        IO.write(:stderr, text)
+      end
+
       def gen_newline do
         "\n"
       end
@@ -54,11 +58,11 @@ defmodule Manga.Printer do
       end
 
       def echo_error(text, [:inline]) do
-        print(gen_error_text(text))
+        print_to_error(gen_error_text(text))
       end
 
       def echo_error(text) do
-        print_line(gen_error_text(text))
+        print_to_error(gen_error_text(text) <> "\n")
       end
 
       def echo_warning(text, [:inline]) do

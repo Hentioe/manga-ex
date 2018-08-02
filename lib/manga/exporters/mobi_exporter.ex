@@ -1,9 +1,9 @@
-defmodule Manga.Res.PdfExport do
-  @behaviour Manga.Res.Export
+defmodule Manga.Res.MobiExporter do
+  use Manga.Res.Exporter
 
   def save_from_stage(stage) do
     epub_file = "./_res/EPUBs/#{stage.name}.epub"
-    output_file = "./_res/PDFs/#{stage.name}.pdf"
+    output_file = "./_res/MOBIs/#{stage.name}.mobi"
 
     if !File.exists?(epub_file) do
       {:error, "EPUB template not exists"}
