@@ -1,12 +1,13 @@
-defmodule Manga.Res.MHTOrigin do
-  use Manga.Res.Origin
+defmodule Manga.Origin.GFMHWOrigin do
+  use Manga.Origin
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
-  import Manga.Utils.{ProgressBar, JsRuntime}
+  import Manga.Utils.ProgressBar
+  import Manga.Utils.JsRuntime
 
   def index(more \\ 1) do
-    url = "http://www.manhuatai.com/all_p#{more}.html"
+    url = "http://www.gufengmh.com/list/ribenmanhua/click/#{more}/"
 
     resp = HC.get(url)
 
@@ -14,18 +15,17 @@ defmodule Manga.Res.MHTOrigin do
       list =
         resp
         |> HCR.body()
-        |> Floki.find("a.sdiv[title]")
+        |> Floki.find(".book-list > li > a")
         |> Enum.map(fn linkNode ->
           Info.create(
             name: linkNode |> Floki.attribute("title") |> List.first(),
-            url:
-              "http://www.manhuatai.com" <> (linkNode |> Floki.attribute("href") |> List.first())
+            url: linkNode |> Floki.attribute("href") |> List.first()
           )
         end)
 
       {:ok, list}
     else
-      {:error, resp |> HCR.error_msg("Index:MHT")}
+      {:error, resp |> HCR.error_msg("Index:GFMHW")}
     end
   end
 
@@ -41,19 +41,19 @@ defmodule Manga.Res.MHTOrigin do
 
       list =
         html
-        |> Floki.find(~s|ul[name="topiccount"] > li > a|)
+        |> Floki.find(~s|.chapter-body > ul > li > a|)
         |> Enum.map(fn linkNode ->
           Stage.create(
-            name: Floki.attribute(linkNode, "title") |> List.first(),
-            url: "http://www.manhuatai.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.text(linkNode),
+            url: "http://www.gufengmh.com" <> (Floki.attribute(linkNode, "href") |> List.first())
           )
         end)
 
       get_name = fn ->
         html
-        |> Floki.find(~s|meta[property="og:title"]|)
-        |> Floki.attribute("content")
+        |> Floki.find(~s|.book-title > h1 > span|)
         |> List.first()
+        |> Floki.text()
       end
 
       info =
@@ -66,7 +66,7 @@ defmodule Manga.Res.MHTOrigin do
     end
   end
 
-  @mht_lib_file File.read!("priv/mht_lib.js")
+  @gfmhw_lib_file File.read!("priv/gfmhw_lib.js")
   def fetch(stage) do
     newline()
     render_fetch(stage.name, 0, 2)
@@ -75,33 +75,39 @@ defmodule Manga.Res.MHTOrigin do
     if HCR.success?(resp) do
       html = HCR.body(resp)
 
+      script_regex = ~r|<script>;var siteName = "";([\s\S]+)</script><div class="chapter-view">|i
+
       script =
-        html
-        |> (&Regex.scan(~r|var\s*(mh_info\s*=\{[^\}]+\})|i, &1)).()
+        Regex.scan(script_regex, html)
         |> List.first()
         |> List.last()
         |> (fn script ->
-              console_log =
-                ~s|console.log(`[count: ${mh_info.totalimg}, path: "${mh_info.imgpath}", start: ${mh_info.startimg}]`)|
-
-              ~s|#{script}\n#{@mht_lib_file}\n#{console_log}|
+              ~s|#{script}\n#{@gfmhw_lib_file}|
             end).()
 
       case eval_to_elixir_result(script) do
-        {:ok, [count: count, path: path, start: start]} ->
+        {:ok, [images: images, path: path]} ->
           plist =
-            start..count
+            0..(length(images) - 1)
             |> Enum.map(fn i ->
+              img = Enum.at(images, i)
+
               Page.create(
-                p: i,
-                url: "http://mhpic.mh51.com/comic/" <> path <> "#{i}.jpg-mht.middle.webp"
+                p: i + 1,
+                url: "http://res.gufengmh.com/" <> path <> img
               )
             end)
 
           render_fetch(stage.name, 1, 2)
 
           get_name = fn ->
-            html |> Floki.find(".mh_readtitle > h1 > strong") |> List.first() |> Floki.text()
+            html
+            |> Floki.find(".w996.title.pr")
+            |> List.first()
+            |> (fn title_node ->
+                  (title_node |> Floki.find("h1") |> List.first() |> Floki.text()) <>
+                    (title_node |> Floki.find("h2") |> List.first() |> Floki.text())
+                end).()
           end
 
           stage =

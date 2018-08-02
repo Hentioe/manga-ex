@@ -1,5 +1,5 @@
-defmodule Manga.Res.HHMHOrigin do
-  use Manga.Res.Origin
+defmodule Manga.Origin.HHMHOrigin do
+  use Manga.Origin
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR

@@ -15,73 +15,73 @@ defmodule Manga.Res do
     dmzj:
       Platform.create(
         name: "动漫之家",
-        origin: Manga.Res.DMZJOrigin,
+        origin: Manga.Origin.DMZJOrigin,
         url: "https://manhua.dmzj.com"
       ),
     mhg:
       Platform.create(
         name: "漫画柜",
-        origin: Manga.Res.MHGOrigin,
+        origin: Manga.Origin.MHGOrigin,
         url: "https://www.manhuagui.com"
       ),
     dm5:
       Platform.create(
         name: "动漫屋",
-        origin: Manga.Res.DM5Origin,
+        origin: Manga.Origin.DM5Origin,
         url: "http://www.dm5.com"
       ),
     mhr:
       Platform.create(
         name: "漫画人",
-        origin: Manga.Res.MHROrigin,
+        origin: Manga.Origin.MHROrigin,
         url: "http://www.manhuaren.com"
       ),
     dmk:
       Platform.create(
         name: "動漫狂",
-        origin: Manga.Res.DMKOrigin,
+        origin: Manga.Origin.DMKOrigin,
         url: "http://www.cartoonmad.com"
       ),
     # kkmh:
     # Platform.create(
     #   name: "KuKu动漫",
-    #   origin: Manga.Res.KKDMOrigin,
+    #   origin: Manga.Origin.KKDMOrigin,
     #   url: "http://comic.kukudm.com"
     # ),
     verydm:
       Platform.create(
         name: "非常爱漫",
-        origin: Manga.Res.VeryDMOrigin,
+        origin: Manga.Origin.VeryDMOrigin,
         url: "http://www.verydm.com"
       ),
     xxmhw:
       Platform.create(
         name: "新新漫画网",
-        origin: Manga.Res.XXMHWOrigin,
+        origin: Manga.Origin.XXMHWOrigin,
         url: "https://www.177mh.net"
       ),
     mht:
       Platform.create(
         name: "漫画台",
-        origin: Manga.Res.MHTOrigin,
+        origin: Manga.Origin.MHTOrigin,
         url: "http://www.manhuatai.com"
       ),
     gfmhw:
       Platform.create(
         name: "古风漫画网",
-        origin: Manga.Res.GFMHWOrigin,
+        origin: Manga.Origin.GFMHWOrigin,
         url: "http://www.gufengmh.com"
       ),
     hhmh:
       Platform.create(
         name: "汗汗漫画",
-        origin: Manga.Res.HHMHOrigin,
+        origin: Manga.Origin.HHMHOrigin,
         url: "http://www.hhmmoo.com"
       ),
     fzdm:
       Platform.create(
         name: "风之动漫",
-        origin: Manga.Res.FZDMOrigin,
+        origin: Manga.Origin.FZDMOrigin,
         url: "https://www.fzdm.com"
       )
   ]

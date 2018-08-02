@@ -1,13 +1,12 @@
-defmodule Manga.Res.GFMHWOrigin do
-  use Manga.Res.Origin
+defmodule Manga.Origin.MHTOrigin do
+  use Manga.Origin
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC
   alias Manga.Utils.HTTPClient.Response, as: HCR
-  import Manga.Utils.ProgressBar
-  import Manga.Utils.JsRuntime
+  import Manga.Utils.{ProgressBar, JsRuntime}
 
   def index(more \\ 1) do
-    url = "http://www.gufengmh.com/list/ribenmanhua/click/#{more}/"
+    url = "http://www.manhuatai.com/all_p#{more}.html"
 
     resp = HC.get(url)
 
@@ -15,17 +14,18 @@ defmodule Manga.Res.GFMHWOrigin do
       list =
         resp
         |> HCR.body()
-        |> Floki.find(".book-list > li > a")
+        |> Floki.find("a.sdiv[title]")
         |> Enum.map(fn linkNode ->
           Info.create(
             name: linkNode |> Floki.attribute("title") |> List.first(),
-            url: linkNode |> Floki.attribute("href") |> List.first()
+            url:
+              "http://www.manhuatai.com" <> (linkNode |> Floki.attribute("href") |> List.first())
           )
         end)
 
       {:ok, list}
     else
-      {:error, resp |> HCR.error_msg("Index:GFMHW")}
+      {:error, resp |> HCR.error_msg("Index:MHT")}
     end
   end
 
@@ -41,19 +41,19 @@ defmodule Manga.Res.GFMHWOrigin do
 
       list =
         html
-        |> Floki.find(~s|.chapter-body > ul > li > a|)
+        |> Floki.find(~s|ul[name="topiccount"] > li > a|)
         |> Enum.map(fn linkNode ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: "http://www.gufengmh.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.attribute(linkNode, "title") |> List.first(),
+            url: "http://www.manhuatai.com" <> (Floki.attribute(linkNode, "href") |> List.first())
           )
         end)
 
       get_name = fn ->
         html
-        |> Floki.find(~s|.book-title > h1 > span|)
+        |> Floki.find(~s|meta[property="og:title"]|)
+        |> Floki.attribute("content")
         |> List.first()
-        |> Floki.text()
       end
 
       info =
@@ -66,7 +66,7 @@ defmodule Manga.Res.GFMHWOrigin do
     end
   end
 
-  @gfmhw_lib_file File.read!("priv/gfmhw_lib.js")
+  @mht_lib_file File.read!("priv/mht_lib.js")
   def fetch(stage) do
     newline()
     render_fetch(stage.name, 0, 2)
@@ -75,39 +75,33 @@ defmodule Manga.Res.GFMHWOrigin do
     if HCR.success?(resp) do
       html = HCR.body(resp)
 
-      script_regex = ~r|<script>;var siteName = "";([\s\S]+)</script><div class="chapter-view">|i
-
       script =
-        Regex.scan(script_regex, html)
+        html
+        |> (&Regex.scan(~r|var\s*(mh_info\s*=\{[^\}]+\})|i, &1)).()
         |> List.first()
         |> List.last()
         |> (fn script ->
-              ~s|#{script}\n#{@gfmhw_lib_file}|
+              console_log =
+                ~s|console.log(`[count: ${mh_info.totalimg}, path: "${mh_info.imgpath}", start: ${mh_info.startimg}]`)|
+
+              ~s|#{script}\n#{@mht_lib_file}\n#{console_log}|
             end).()
 
       case eval_to_elixir_result(script) do
-        {:ok, [images: images, path: path]} ->
+        {:ok, [count: count, path: path, start: start]} ->
           plist =
-            0..(length(images) - 1)
+            start..count
             |> Enum.map(fn i ->
-              img = Enum.at(images, i)
-
               Page.create(
-                p: i + 1,
-                url: "http://res.gufengmh.com/" <> path <> img
+                p: i,
+                url: "http://mhpic.mh51.com/comic/" <> path <> "#{i}.jpg-mht.middle.webp"
               )
             end)
 
           render_fetch(stage.name, 1, 2)
 
           get_name = fn ->
-            html
-            |> Floki.find(".w996.title.pr")
-            |> List.first()
-            |> (fn title_node ->
-                  (title_node |> Floki.find("h1") |> List.first() |> Floki.text()) <>
-                    (title_node |> Floki.find("h2") |> List.first() |> Floki.text())
-                end).()
+            html |> Floki.find(".mh_readtitle > h1 > strong") |> List.first() |> Floki.text()
           end
 
           stage =
