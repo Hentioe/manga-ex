@@ -28,6 +28,7 @@ defmodule Manga.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
       {:httpotion, "~> 3.1"},
       {:floki, "~> 0.20.2"},
       {:download, github: "Hentioe/download.ex", tag: "0.0.5"},
