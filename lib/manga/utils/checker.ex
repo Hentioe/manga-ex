@@ -1,4 +1,7 @@
 defmodule Manga.Utils.Checker do
+
+  @moduledoc false
+
   def install_node? do
     case cmd("node", ["-v"]) do
       {:ok, _} ->

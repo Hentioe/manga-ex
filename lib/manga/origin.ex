@@ -1,4 +1,7 @@
 defmodule Manga.Origin do
+
+  @moduledoc false
+
   defmacro __using__(_witch) do
     quote do
       @behaviour Manga.Origin

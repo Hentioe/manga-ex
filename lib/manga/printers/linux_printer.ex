@@ -1,4 +1,7 @@
 defmodule Manga.Printer.LinuxPrinter do
+
+  @moduledoc false
+
   use Manga.Printer
 
   def gen_normal_text(text) do

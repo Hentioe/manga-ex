@@ -1,4 +1,7 @@
 defmodule Manga.Model.Page do
+
+  @moduledoc false
+
   @default_http_headers %{}
   @default_http_options []
   @default_img_formmat "jpg"

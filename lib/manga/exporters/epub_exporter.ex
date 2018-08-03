@@ -1,4 +1,7 @@
 defmodule Manga.Exporter.EpubExporter do
+
+  @moduledoc false
+
   use Manga.Exporter
 
   import Manga.Utils.IOUtils

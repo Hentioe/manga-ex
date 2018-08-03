@@ -1,4 +1,7 @@
 defmodule Manga.Exporter do
+
+  @moduledoc false
+
   defmacro __using__(_otps) do
     quote do
       @behaviour Manga.Exporter

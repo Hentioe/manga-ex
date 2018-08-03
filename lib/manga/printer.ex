@@ -1,4 +1,7 @@
 defmodule Manga.Printer do
+
+  @moduledoc false
+
   alias Manga.Printer.{LinuxPrinter, WindowsPrinter}
   alias Manga.Utils.{Props}
 
@@ -85,7 +88,7 @@ defmodule Manga.Printer do
   def get_current_printer do
     case Props.get_os_name() do
       :linux -> LinuxPrinter
-      :win32 -> WindowsPrinter
+      :nt -> WindowsPrinter
       error -> {:error, error}
     end
   end

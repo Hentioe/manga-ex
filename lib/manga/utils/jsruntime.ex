@@ -1,4 +1,7 @@
 defmodule Manga.Utils.JsRuntime do
+
+  @moduledoc false
+
   defp eval_from_node(script_code) do
     case System.cmd("node", ["-e", script_code]) do
       {output, 0} ->

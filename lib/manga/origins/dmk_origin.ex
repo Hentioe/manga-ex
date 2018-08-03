@@ -1,4 +1,7 @@
 defmodule Manga.Origin.DMKOrigin do
+
+  @moduledoc false
+
   use Manga.Origin
   use Manga.Res, :models
   alias Manga.Utils.HTTPClient, as: HC

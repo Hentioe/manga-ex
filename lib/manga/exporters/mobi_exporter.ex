@@ -1,4 +1,7 @@
 defmodule Manga.Exporter.MobiExporter do
+
+  @moduledoc false
+
   use Manga.Exporter
 
   def save_from_stage(stage) do

@@ -1,4 +1,7 @@
 defmodule Manga.Utils.Downloader do
+
+  @moduledoc false
+
   import Manga.Utils.IOUtils
   import Manga.Utils.ProgressBar
   alias Manga.Utils.Props

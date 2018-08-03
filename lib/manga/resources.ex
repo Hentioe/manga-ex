@@ -1,4 +1,7 @@
 defmodule Manga.Res do
+
+  @moduledoc false
+
   def models do
     quote do
       alias Manga.Model.{Platform, Info, Stage, Page}

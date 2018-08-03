@@ -1,4 +1,7 @@
 defmodule Manga.Utils.HTTPClient do
+
+  @moduledoc false
+
   alias HTTPotion, as: HP
 
   @default_user_agent "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
@@ -24,6 +27,9 @@ defmodule Manga.Utils.HTTPClient do
 end
 
 defmodule Manga.Utils.HTTPClient.Response do
+
+  @moduledoc false
+
   alias HTTPotion.Response, as: HPR
 
   def body(resp) do

@@ -1,4 +1,7 @@
 defmodule Mix.Tasks.Manga.Bundle do
+
+  @moduledoc false
+
   use Mix.Task
 
   def run(_args) do

@@ -1,4 +1,7 @@
 defmodule Manga.Model.Stage do
+
+  @moduledoc false
+
   defstruct [:name, :url, :platform, plist: []]
 
   def create(props) when is_list(props) do

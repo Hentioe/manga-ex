@@ -1,9 +1,12 @@
 defmodule Manga do
+
+  @moduledoc false
+
   import Manga.Res
   alias Manga.Utils.{ProgressBar, Props, Checker, IOUtils}
   use Tabula
   use Manga.Res, :models
-  @version "alpha10-1"
+  @version "alpha10-2"
 
   def main(args \\ []) do
     case passed() do
