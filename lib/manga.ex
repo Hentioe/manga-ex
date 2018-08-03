@@ -203,7 +203,8 @@ defmodule Manga do
     converts = [{"EPUB", Manga.Res.EpubExporter}]
 
     if Checker.install_converter?(),
-      do: converts ++ [{"MOBI", Manga.Res.MobiExporter}, {"PDF", Manga.Res.PdfExporter}],
+      do:
+        converts ++ [{"MOBI", Manga.Exporter.MobiExporter}, {"PDF", Manga.Exporter.PdfExporter}],
       else: converts
   end
 

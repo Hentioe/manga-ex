@@ -16,10 +16,10 @@ defmodule Manga.Origin.XXMHWOrigin do
         resp
         |> HCR.body()
         |> Floki.find(".ar_list_co > ul > li > span > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.text(),
-            url: "https://www.177mh.net" <> (linkNode |> Floki.attribute("href") |> List.first())
+            name: link_node |> Floki.text(),
+            url: "https://www.177mh.net" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -42,10 +42,10 @@ defmodule Manga.Origin.XXMHWOrigin do
       list =
         html
         |> Floki.find("ul.ar_rlos_bor.ar_list_col > li > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: "https://www.177mh.net" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.text(link_node),
+            url: "https://www.177mh.net" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

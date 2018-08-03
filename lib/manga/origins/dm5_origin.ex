@@ -15,10 +15,10 @@ defmodule Manga.Origin.DM5Origin do
         resp
         |> HCR.body()
         |> Floki.find("ul.mh-list.col3.top-cat > li .mh-item-detali > h2.title > a")
-        |> Enum.map(fn aNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: aNode |> Floki.text(),
-            url: "http://www.dm5.com" <> (aNode |> Floki.attribute("href") |> List.first())
+            name: link_node |> Floki.text(),
+            url: "http://www.dm5.com" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -41,15 +41,15 @@ defmodule Manga.Origin.DM5Origin do
       list =
         html
         |> Floki.find("ul > li > a[title]")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
             name:
-              Floki.raw_html(linkNode)
+              Floki.raw_html(link_node)
               |> (&Regex.scan(~r|\>(.+)\<span\>|, &1)).()
               |> List.first()
               |> List.last()
               |> String.trim(),
-            url: "http://www.dm5.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            url: "http://www.dm5.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 
@@ -142,7 +142,7 @@ defmodule Manga.Origin.DM5Origin do
   end
 
   defp each_fetch(url_params, count, referer, name, list \\ [], page \\ 1) do
-    if(page <= count) do
+    if page <= count do
       url =
         "http://www.dm5.com/m617894/chapterfun.ashx?page=#{page}&&key=&language=1&gtk=6#{
           url_params

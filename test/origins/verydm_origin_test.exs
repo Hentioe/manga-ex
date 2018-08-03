@@ -26,6 +26,5 @@ defmodule Manga.Res.VeryDMOriginTest do
     assert result.name != nil
     assert is_list(result.plist)
     assert length(result.plist) == 22
-    IO.inspect(result)
   end
 end

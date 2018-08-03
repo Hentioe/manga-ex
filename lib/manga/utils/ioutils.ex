@@ -61,7 +61,7 @@ defmodule Manga.Utils.IOUtils do
   end
 
   defp expansion_sub_list(rlist, elist \\ [], n \\ 0) do
-    if(!(n == length(rlist))) do
+    if !(n == length(rlist)) do
       expansion_sub_list(rlist, elist ++ Enum.at(rlist, n), n + 1)
     else
       elist

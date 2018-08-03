@@ -1,5 +1,4 @@
 defmodule Manga.Utils.Props do
-
   alias Manga.{Printer}
 
   @table :props

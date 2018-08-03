@@ -16,10 +16,10 @@ defmodule Manga.Origin.HHMHOrigin do
         resp
         |> HCR.body()
         |> Floki.find(".cTopComicList > .cComicItem > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.text(),
-            url: "http://www.hhmmoo.com" <> (linkNode |> Floki.attribute("href") |> List.first())
+            name: link_node |> Floki.text(),
+            url: "http://www.hhmmoo.com" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -42,10 +42,10 @@ defmodule Manga.Origin.HHMHOrigin do
       list =
         html
         |> Floki.find(~s|.cVolUl > li > a|)
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: "http://www.hhmmoo.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.text(link_node),
+            url: "http://www.hhmmoo.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

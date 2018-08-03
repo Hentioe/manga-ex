@@ -14,10 +14,10 @@ defmodule Manga.Origin.KKDMOrigin do
         resp
         |> HCR.body()
         |> Floki.find("#comicmain > dd > a:nth-child(2)")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.text(),
-            url: linkNode |> Floki.attribute("href") |> List.first()
+            name: link_node |> Floki.text(),
+            url: link_node |> Floki.attribute("href") |> List.first()
           )
         end)
 

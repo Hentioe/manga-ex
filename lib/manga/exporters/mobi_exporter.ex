@@ -1,4 +1,4 @@
-defmodule Manga.Res.MobiExporter do
+defmodule Manga.Exporter.MobiExporter do
   use Manga.Exporter
 
   def save_from_stage(stage) do

@@ -85,7 +85,7 @@ defmodule Manga.Printer do
   def get_current_printer do
     case Props.get_os_name() do
       :linux -> LinuxPrinter
-      :windows -> WindowsPrinter
+      :win32 -> WindowsPrinter
       error -> {:error, error}
     end
   end

@@ -1,4 +1,4 @@
-defmodule Manga.Res.EpubExporter do
+defmodule Manga.Exporter.EpubExporter do
   use Manga.Exporter
 
   import Manga.Utils.IOUtils

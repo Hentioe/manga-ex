@@ -1,4 +1,4 @@
-defmodule Manga.Res.PdfExporter do
+defmodule Manga.Exporter.PdfExporter do
   use Manga.Exporter
 
   def save_from_stage(stage) do

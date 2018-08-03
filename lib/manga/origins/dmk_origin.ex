@@ -22,11 +22,11 @@ defmodule Manga.Origin.DMKOrigin do
         |> HCR.body()
         |> Mbcs.decode!(:big5)
         |> Floki.find(~s{td[colspan="2"] td[align="center"] > a})
-        |> Enum.map(fn aNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: aNode |> Floki.text(),
+            name: link_node |> Floki.text(),
             url:
-              "http://www.cartoonmad.com/" <> (aNode |> Floki.attribute("href") |> List.first())
+              "http://www.cartoonmad.com/" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -51,11 +51,11 @@ defmodule Manga.Origin.DMKOrigin do
       list =
         html
         |> Floki.find(~s|fieldset td > a|)
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode) |> Mbcs.decode!(:big5),
+            name: Floki.text(link_node) |> Mbcs.decode!(:big5),
             url:
-              "http://www.cartoonmad.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+              "http://www.cartoonmad.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 
@@ -86,8 +86,8 @@ defmodule Manga.Origin.DMKOrigin do
       list =
         html
         |> Floki.find(~s|select[name="jump"] > option[value]|)
-        |> Enum.map(fn optionNode ->
-          optionNode |> Floki.attribute("value") |> List.first()
+        |> Enum.map(fn option_node ->
+          option_node |> Floki.attribute("value") |> List.first()
         end)
 
       render_fetch(stage.name, 1, length(list))
@@ -103,8 +103,8 @@ defmodule Manga.Origin.DMKOrigin do
       get_name = fn ->
         html
         |> Floki.find(~s|a[style="font-size:14pt;font-weight: bold;"]|)
-        |> Enum.map(fn linkNode ->
-          Floki.text(linkNode)
+        |> Enum.map(fn link_node ->
+          Floki.text(link_node)
           |> Mbcs.decode!(:big5)
         end)
         |> Enum.join(" - ")

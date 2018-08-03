@@ -4,6 +4,5 @@ defmodule Manga.Utils.IOUtilsTest do
 
   test "gets_numbers" do
     gets_numbers("1,a,2-9,1-19,27-31")
-    |> IO.inspect()
   end
 end

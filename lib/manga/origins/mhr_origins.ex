@@ -21,16 +21,16 @@ defmodule Manga.Origin.MHROrigin do
         resp
         |> HCR.body()
         |> Floki.find(".rankList > #rankList_1 > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
             name:
-              linkNode
+              link_node
               |> Floki.find(".title.d-nowrap")
               |> List.first()
               |> Floki.text()
               |> String.trim(),
             url:
-              "http://www.manhuaren.com" <> (linkNode |> Floki.attribute("href") |> List.first())
+              "http://www.manhuaren.com" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -53,12 +53,12 @@ defmodule Manga.Origin.MHROrigin do
       list =
         html
         |> Floki.find(~s|#chapterList_1 > ul > li > a|)
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
             name:
-              Floki.text(linkNode)
+              Floki.text(link_node)
               |> String.trim(),
-            url: "http://www.manhuaren.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            url: "http://www.manhuaren.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

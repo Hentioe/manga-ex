@@ -18,10 +18,10 @@ defmodule Manga.Origin.VeryDMOrigin do
         resp
         |> HCR.body()
         |> Floki.find("ul.grid-row.clearfix > li > p > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.text(),
-            url: linkNode |> Floki.attribute("href") |> List.first()
+            name: link_node |> Floki.text(),
+            url: link_node |> Floki.attribute("href") |> List.first()
           )
         end)
 
@@ -44,10 +44,10 @@ defmodule Manga.Origin.VeryDMOrigin do
       list =
         html
         |> Floki.find(".chapters > ul.clearfix > li > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: "http://www.verydm.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.text(link_node),
+            url: "http://www.verydm.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

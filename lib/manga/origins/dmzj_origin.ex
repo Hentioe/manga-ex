@@ -19,10 +19,10 @@ defmodule Manga.Origin.DMZJOrigin do
         resp
         |> HCR.body()
         |> Floki.find(".middlerighter span.title > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.text(),
-            url: linkNode |> Floki.attribute("href") |> List.first()
+            name: link_node |> Floki.text(),
+            url: link_node |> Floki.attribute("href") |> List.first()
           )
         end)
 
@@ -43,10 +43,10 @@ defmodule Manga.Origin.DMZJOrigin do
     #     |> HCR.body()
     #     |> IO.puts()
     #     |> Floki.find(".tcaricature_new .tcaricature_block.tcaricature_block2 > ul > li > a")
-    #     |> Enum.map(fn linkNode ->
+    #     |> Enum.map(fn link_node ->
     #       Info.create(
-    #         name: linkNode |> Floki.text(),
-    #         url: "https:" <> (linkNode |> Floki.attribute("href") |> List.first())
+    #         name: link_node |> Floki.text(),
+    #         url: "https:" <> (link_node |> Floki.attribute("href") |> List.first())
     #       )
     #     end)
 
@@ -65,10 +65,10 @@ defmodule Manga.Origin.DMZJOrigin do
       list =
         html
         |> Floki.find(".middleright_mr > div > ul > li > a[title]")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: "https://manhua.dmzj.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.text(link_node),
+            url: "https://manhua.dmzj.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

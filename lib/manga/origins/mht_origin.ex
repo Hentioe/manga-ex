@@ -15,11 +15,11 @@ defmodule Manga.Origin.MHTOrigin do
         resp
         |> HCR.body()
         |> Floki.find("a.sdiv[title]")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.attribute("title") |> List.first(),
+            name: link_node |> Floki.attribute("title") |> List.first(),
             url:
-              "http://www.manhuatai.com" <> (linkNode |> Floki.attribute("href") |> List.first())
+              "http://www.manhuatai.com" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -42,10 +42,10 @@ defmodule Manga.Origin.MHTOrigin do
       list =
         html
         |> Floki.find(~s|ul[name="topiccount"] > li > a|)
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.attribute(linkNode, "title") |> List.first(),
-            url: "http://www.manhuatai.com" <> (Floki.attribute(linkNode, "href") |> List.first())
+            name: Floki.attribute(link_node, "title") |> List.first(),
+            url: "http://www.manhuatai.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

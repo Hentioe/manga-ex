@@ -15,19 +15,19 @@ defmodule Manga.Origin.FZDMOrigin do
   def index do
     resp = HC.get("https://manhua.fzdm.com/")
 
-    if(HCR.success?(resp)) do
+    if HCR.success?(resp) do
       list =
         resp
         |> HCR.body()
         |> Floki.find("ul > div.round > li > a")
         |> Enum.with_index()
         |> Enum.filter(fn {_, i} -> rem(i, 2) != 0 end)
-        |> Enum.map(fn {linkNode, _} -> linkNode end)
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn {link_node, _} -> link_node end)
+        |> Enum.map(fn link_node ->
           Info.create(
-            name: linkNode |> Floki.attribute("title") |> List.first(),
+            name: link_node |> Floki.attribute("title") |> List.first(),
             url:
-              "https://manhua.fzdm.com/" <> (linkNode |> Floki.attribute("href") |> List.first())
+              "https://manhua.fzdm.com/" <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -59,10 +59,10 @@ defmodule Manga.Origin.FZDMOrigin do
         resp
         |> HCR.body()
         |> Floki.find("li.pure-u-1-2.pure-u-lg-1-4 > a")
-        |> Enum.map(fn linkNode ->
+        |> Enum.map(fn link_node ->
           Stage.create(
-            name: Floki.text(linkNode),
-            url: info.url <> (linkNode |> Floki.attribute("href") |> List.first())
+            name: Floki.text(link_node),
+            url: info.url <> (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -114,7 +114,7 @@ defmodule Manga.Origin.FZDMOrigin do
         {:ok, stage}
       end
     else
-      if(HCR.status_code?(resp, 500)) do
+      if HCR.status_code?(resp, 500) do
         {:ok, stage}
       else
         {:error, resp |> HCR.error_msg("Fetch:#{stage.name}")}
