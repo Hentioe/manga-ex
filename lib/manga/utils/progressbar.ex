@@ -1,5 +1,4 @@
 defmodule Manga.Utils.ProgressBar do
-
   @moduledoc false
 
   def render(cur, tot, opts \\ []) do

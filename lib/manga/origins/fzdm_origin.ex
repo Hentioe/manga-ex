@@ -1,5 +1,4 @@
 defmodule Manga.Origin.FZDMOrigin do
-
   @moduledoc false
 
   use Manga.Origin

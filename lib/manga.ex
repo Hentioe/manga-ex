@@ -1,5 +1,4 @@
 defmodule Manga do
-
   @moduledoc false
 
   import Manga.Res

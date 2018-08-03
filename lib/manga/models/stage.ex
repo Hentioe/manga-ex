@@ -1,11 +1,10 @@
 defmodule Manga.Model.Stage do
-
   @moduledoc false
 
   defstruct [:name, :url, :platform, plist: []]
 
   def create(props) when is_list(props) do
-    plist = if(!props[:plist], do: [], else: props[:plist])
+    plist = if props[:plist], do: props[:plist], else: []
     %__MODULE__{name: props[:name], url: props[:url], platform: props[:platform], plist: plist}
   end
 

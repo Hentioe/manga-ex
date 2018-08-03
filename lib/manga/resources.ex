@@ -1,5 +1,4 @@
 defmodule Manga.Res do
-
   @moduledoc false
 
   def models do

@@ -1,5 +1,4 @@
 defmodule Manga.Origin.DMKOrigin do
-
   @moduledoc false
 
   use Manga.Origin
@@ -29,7 +28,8 @@ defmodule Manga.Origin.DMKOrigin do
           Stage.create(
             name: link_node |> Floki.text(),
             url:
-              "http://www.cartoonmad.com/" <> (link_node |> Floki.attribute("href") |> List.first())
+              "http://www.cartoonmad.com/" <>
+                (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 

@@ -1,5 +1,4 @@
 defmodule Manga.Origin.MHTOrigin do
-
   @moduledoc false
 
   use Manga.Origin
@@ -48,7 +47,8 @@ defmodule Manga.Origin.MHTOrigin do
         |> Enum.map(fn link_node ->
           Stage.create(
             name: Floki.attribute(link_node, "title") |> List.first(),
-            url: "http://www.manhuatai.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url:
+              "http://www.manhuatai.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

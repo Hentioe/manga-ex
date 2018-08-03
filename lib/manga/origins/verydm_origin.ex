@@ -1,5 +1,4 @@
 defmodule Manga.Origin.VeryDMOrigin do
-
   @moduledoc false
 
   use Manga.Origin

@@ -1,5 +1,4 @@
 defmodule Manga.Exporter.MobiExporter do
-
   @moduledoc false
 
   use Manga.Exporter
@@ -8,7 +7,7 @@ defmodule Manga.Exporter.MobiExporter do
     epub_file = "./_res/EPUBs/#{stage.name}.epub"
     output_file = "./_res/MOBIs/#{stage.name}.mobi"
 
-    if !File.exists?(epub_file) do
+    if File.exists?(epub_file) do
       {:error, "EPUB template not exists"}
     else
       case System.cmd("ebook-convert", [epub_file, output_file], stderr_to_stdout: true) do

@@ -1,5 +1,4 @@
 defmodule Manga.Origin.MHGOrigin do
-
   @moduledoc false
 
   use Manga.Origin
@@ -22,7 +21,9 @@ defmodule Manga.Origin.MHGOrigin do
         |> Enum.map(fn link_node ->
           Stage.create(
             name: link_node |> Floki.text(),
-            url: "https://www.manhuagui.com" <> (link_node |> Floki.attribute("href") |> List.first())
+            url:
+              "https://www.manhuagui.com" <>
+                (link_node |> Floki.attribute("href") |> List.first())
           )
         end)
 
@@ -54,7 +55,8 @@ defmodule Manga.Origin.MHGOrigin do
         |> Enum.map(fn link_node ->
           Stage.create(
             name: Floki.attribute(link_node, "title") |> List.first(),
-            url: "https://www.manhuagui.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url:
+              "https://www.manhuagui.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

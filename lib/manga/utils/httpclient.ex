@@ -1,5 +1,4 @@
 defmodule Manga.Utils.HTTPClient do
-
   @moduledoc false
 
   alias HTTPotion, as: HP
@@ -27,7 +26,6 @@ defmodule Manga.Utils.HTTPClient do
 end
 
 defmodule Manga.Utils.HTTPClient.Response do
-
   @moduledoc false
 
   alias HTTPotion.Response, as: HPR

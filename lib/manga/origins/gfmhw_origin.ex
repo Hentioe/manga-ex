@@ -1,5 +1,4 @@
 defmodule Manga.Origin.GFMHWOrigin do
-
   @moduledoc false
 
   use Manga.Origin

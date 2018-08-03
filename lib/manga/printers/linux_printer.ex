@@ -1,5 +1,4 @@
 defmodule Manga.Printer.LinuxPrinter do
-
   @moduledoc false
 
   use Manga.Printer

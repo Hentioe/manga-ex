@@ -1,5 +1,4 @@
 defmodule Manga.Utils.JsRuntime do
-
   @moduledoc false
 
   defp eval_from_node(script_code) do

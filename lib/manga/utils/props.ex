@@ -1,5 +1,4 @@
 defmodule Manga.Utils.Props do
-
   @moduledoc false
 
   alias Manga.{Printer}
@@ -47,17 +46,17 @@ defmodule Manga.Utils.Props do
   def set_number(key, value, default \\ 0) do
     value = if value == nil, do: 0, else: value
 
-    if !is_integer(value) do
-      case Integer.parse(value) do
-        {n, _} ->
-          put(key, n)
-
-        {:error} ->
-          Printer.get_current_printer().echo_warning("[props:#{key}] is not a number")
-          put(key, default)
-      end
-    else
+    if is_integer(value) do
       put(key, value)
+    end
+  else
+    case Integer.parse(value) do
+      {n, _} ->
+        put(key, n)
+
+      {:error} ->
+        Printer.get_current_printer().echo_warning("[props:#{key}] is not a number")
+        put(key, default)
     end
   end
 

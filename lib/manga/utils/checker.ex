@@ -1,5 +1,4 @@
 defmodule Manga.Utils.Checker do
-
   @moduledoc false
 
   def install_node? do

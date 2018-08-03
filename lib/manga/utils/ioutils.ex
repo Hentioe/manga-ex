@@ -1,5 +1,4 @@
 defmodule Manga.Utils.IOUtils do
-
   @moduledoc false
 
   def mkdir_not_exists(path_list) when is_list(path_list) do
@@ -33,15 +32,7 @@ defmodule Manga.Utils.IOUtils do
       String.trim(nrage)
     end)
     |> Enum.map(fn nrange ->
-      if !String.contains?(nrange, "-") do
-        case Integer.parse(nrange) do
-          {n, _} ->
-            [n]
-
-          :error ->
-            nil
-        end
-      else
+      if String.contains?(nrange, "-") do
         start_and_end =
           nrange
           |> String.trim()
@@ -56,6 +47,14 @@ defmodule Manga.Utils.IOUtils do
 
         (start_and_end |> List.first())..(start_and_end |> List.last())
         |> Enum.to_list()
+      else
+        case Integer.parse(nrange) do
+          {n, _} ->
+            [n]
+
+          :error ->
+            nil
+        end
       end
     end)
     |> Enum.filter(fn n -> n != nil end)
@@ -64,10 +63,10 @@ defmodule Manga.Utils.IOUtils do
   end
 
   defp expansion_sub_list(rlist, elist \\ [], n \\ 0) do
-    if !(n == length(rlist)) do
-      expansion_sub_list(rlist, elist ++ Enum.at(rlist, n), n + 1)
-    else
+    if n == length(rlist) do
       elist
+    else
+      expansion_sub_list(rlist, elist ++ Enum.at(rlist, n), n + 1)
     end
   end
 end

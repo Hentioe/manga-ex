@@ -1,5 +1,4 @@
 defmodule Manga.Exporter.PdfExporter do
-
   @moduledoc false
 
   use Manga.Exporter
@@ -8,13 +7,14 @@ defmodule Manga.Exporter.PdfExporter do
     epub_file = "./_res/EPUBs/#{stage.name}.epub"
     output_file = "./_res/PDFs/#{stage.name}.pdf"
 
-    if !File.exists?(epub_file) do
-      {:error, "EPUB template not exists"}
-    else
+    if File.exists?(epub_file) do
       case System.cmd("ebook-convert", [epub_file, output_file], stderr_to_stdout: true) do
         {_, 0} -> {:ok, output_file}
         error -> {:error, "Converter:#{stage.name} ebook-convert: #{error}"}
       end
+
+    else
+      {:error, "EPUB template not exists"}
     end
   end
 end

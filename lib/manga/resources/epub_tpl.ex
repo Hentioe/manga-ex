@@ -1,5 +1,4 @@
 defmodule Manga.Res.EpubTpl do
-
   @moduledoc false
 
   def start_xhtml(name, platform, operator) do

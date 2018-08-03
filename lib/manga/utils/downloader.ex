@@ -1,5 +1,4 @@
 defmodule Manga.Utils.Downloader do
-
   @moduledoc false
 
   import Manga.Utils.IOUtils

@@ -1,5 +1,4 @@
 defmodule Manga.Origin.DMZJOrigin do
-
   @moduledoc false
 
   use Manga.Origin

@@ -1,5 +1,4 @@
 defmodule Manga.Printer.WindowsPrinter do
-
   @moduledoc false
 
   use Manga.Printer

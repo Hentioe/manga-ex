@@ -1,5 +1,4 @@
 defmodule Manga.Origin.KKDMOrigin do
-
   @moduledoc false
 
   use Manga.Origin

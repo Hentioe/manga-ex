@@ -1,5 +1,4 @@
 defmodule Manga.Printer do
-
   @moduledoc false
 
   alias Manga.Printer.{LinuxPrinter, WindowsPrinter}

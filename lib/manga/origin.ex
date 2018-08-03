@@ -1,5 +1,4 @@
 defmodule Manga.Origin do
-
   @moduledoc false
 
   defmacro __using__(_witch) do

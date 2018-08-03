@@ -1,5 +1,4 @@
 defmodule Manga.Exporter.EpubExporter do
-
   @moduledoc false
 
   use Manga.Exporter

@@ -1,5 +1,4 @@
 defmodule Manga.Origin.MHROrigin do
-
   @moduledoc false
 
   use Manga.Origin
@@ -61,7 +60,8 @@ defmodule Manga.Origin.MHROrigin do
             name:
               Floki.text(link_node)
               |> String.trim(),
-            url: "http://www.manhuaren.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url:
+              "http://www.manhuaren.com" <> (Floki.attribute(link_node, "href") |> List.first())
           )
         end)
 

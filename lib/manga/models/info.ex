@@ -1,11 +1,10 @@
 defmodule Manga.Model.Info do
-
   @moduledoc false
 
   defstruct [:name, :url, stage_list: []]
 
   def create(props) when is_list(props) do
-    stage_list = if(!props[:stage_list], do: [], else: props[:stage_list])
+    stage_list = if props[:stage_list], do: props[:stage_list], else: []
     %__MODULE__{name: props[:name], url: props[:url], stage_list: stage_list}
   end
 
