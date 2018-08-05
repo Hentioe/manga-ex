@@ -18,18 +18,18 @@ defmodule Manga.Origin.HHMHOrigin do
         resp
         |> HCR.body()
         |> Floki.find(".cTopComicList > .cComicItem > a")
-        |> Enum.map(
-             fn link_node ->
-               Info.create(
-                 name: link_node
-                       |> Floki.text(),
-                 url: "http://www.hhmmoo.com" <> (
-                   link_node
-                   |> Floki.attribute("href")
-                   |> List.first())
-               )
-             end
-           )
+        |> Enum.map(fn link_node ->
+          Info.create(
+            name:
+              link_node
+              |> Floki.text(),
+            url:
+              "http://www.hhmmoo.com" <>
+                (link_node
+                 |> Floki.attribute("href")
+                 |> List.first())
+          )
+        end)
 
       {:ok, list}
     else
@@ -49,22 +49,22 @@ defmodule Manga.Origin.HHMHOrigin do
     resp = HC.get(info.url)
 
     if HCR.success?(resp) do
-      html = resp
-             |> HCR.body()
+      html =
+        resp
+        |> HCR.body()
 
       list =
         html
         |> Floki.find(~s|.cVolUl > li > a|)
-        |> Enum.map(
-             fn link_node ->
-               Stage.create(
-                 name: Floki.text(link_node),
-                 url: "http://www.hhmmoo.com" <> (
-                   Floki.attribute(link_node, "href")
-                   |> List.first())
-               )
-             end
-           )
+        |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+          href = href_attr |> List.first()
+
+          Stage.create(
+            name: Floki.text(link_node),
+            url: "http://www.hhmmoo.com" <> href
+          )
+        end)
 
       get_name = fn ->
         html
@@ -74,8 +74,10 @@ defmodule Manga.Origin.HHMHOrigin do
         |> String.trim()
       end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {
@@ -95,10 +97,11 @@ defmodule Manga.Origin.HHMHOrigin do
   def fetch(stage) do
     newline()
 
-    {prefix, suffix} =
-      Regex.scan(~r{^([^\?]+)/\d*.html(.+)$}, stage.url)
-      |> List.first()
-      |> (fn [_, prefix, suffix] -> {prefix, suffix} end).()
+    {prefix, suffix} = r = Regex.scan(~r{^([^\?]+)/\d*.html(.+)$}, stage.url)
+
+    r
+    |> List.first()
+    |> (fn [_, prefix, suffix] -> {prefix, suffix} end).()
 
     each_fetch(stage, prefix, suffix)
   end
@@ -121,6 +124,7 @@ defmodule Manga.Origin.HHMHOrigin do
           |> List.first()
 
         r = Regex.scan(~r{^(https?://[^/]+)/}, stage.url)
+
         hostname =
           r
           |> List.first()
@@ -159,9 +163,10 @@ defmodule Manga.Origin.HHMHOrigin do
             end
 
             stage = Stage.add_page(stage, page)
+
             stage
             |> (fn stage ->
-              if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
+                  if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
                 end).()
 
             count = if count == -1, do: get_count.(), else: count

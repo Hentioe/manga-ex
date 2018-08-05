@@ -18,14 +18,18 @@ defmodule Manga.Utils.IOUtils do
   end
 
   def gets_number(text) do
-    gets(text)
+    text = gets(text)
+
+    text
     |> String.trim()
     |> Integer.parse()
   end
 
   # 通过用户输入的区间和列表构造出完整的数字列表
   def gets_numbers(text) do
-    gets(text)
+    text = gets(text)
+
+    text
     |> String.trim()
     |> String.split(",")
     |> Enum.map(fn nrage ->

@@ -56,11 +56,14 @@ defmodule Manga.Origin.DM5Origin do
         end)
 
       get_name = fn ->
-        Regex.scan(~r/DM5_COMIC_MNAME="([^"]+)"/i, html) |> List.first() |> List.last()
+        r = Regex.scan(~r/DM5_COMIC_MNAME="([^"]+)"/i, html)
+        r |> List.first() |> List.last()
       end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {:ok, info |> Info.reverse_stage_list()}
@@ -117,8 +120,10 @@ defmodule Manga.Origin.DM5Origin do
 
       render_fetch(name, 1, count)
 
+      plist = each_fetch(url_params, count, stage.url, name)
+
       plist =
-        each_fetch(url_params, count, stage.url, name)
+        plist
         |> Enum.with_index()
         |> Enum.map(fn {url, i} ->
           Page.create(
@@ -130,8 +135,10 @@ defmodule Manga.Origin.DM5Origin do
           )
         end)
 
+      stage = Stage.update_plist(stage, plist)
+
       stage =
-        Stage.update_plist(stage, plist)
+        stage
         |> (fn stage ->
               if stage.name == nil, do: Stage.rename(stage, name), else: stage
             end).()

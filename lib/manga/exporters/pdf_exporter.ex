@@ -12,7 +12,6 @@ defmodule Manga.Exporter.PdfExporter do
         {_, 0} -> {:ok, output_file}
         error -> {:error, "Converter:#{stage.name} ebook-convert: #{error}"}
       end
-
     else
       {:error, "EPUB template not exists"}
     end

@@ -48,15 +48,15 @@ defmodule Manga.Utils.Props do
 
     if is_integer(value) do
       put(key, value)
-    end
-  else
-    case Integer.parse(value) do
-      {n, _} ->
-        put(key, n)
+    else
+      case Integer.parse(value) do
+        {n, _} ->
+          put(key, n)
 
-      {:error} ->
-        Printer.get_current_printer().echo_warning("[props:#{key}] is not a number")
-        put(key, default)
+        {:error} ->
+          Printer.get_current_printer().echo_warning("[props:#{key}] is not a number")
+          put(key, default)
+      end
     end
   end
 
@@ -83,12 +83,14 @@ defmodule Manga.Utils.Props do
     delay_list
     |> String.split(",")
     |> Enum.filter(fn ns -> String.trim(ns, " ") != "" end)
-    |> Enum.each(fn ns ->
-      case get_delay.(ns) do
-        {:f, delay} -> set_fetch_delay(delay)
-        {:d, delay} -> set_download_delay(delay)
-      end
-    end)
+    |> Enum.each(
+         fn ns ->
+           case get_delay.(ns) do
+             {:f, delay} -> set_fetch_delay(delay)
+             {:d, delay} -> set_download_delay(delay)
+           end
+         end
+       )
   end
 
   def set_delay(_), do: nil
@@ -99,19 +101,25 @@ defmodule Manga.Utils.Props do
     nlist
     |> Enum.map(fn {_, address_list} -> address_list end)
     |> Enum.filter(fn address_list -> address_list[:hwaddr] != nil end)
-    |> Enum.map(fn address_list ->
-      address_list[:hwaddr]
-      |> Enum.map(fn hw_unit ->
-        Integer.to_string(hw_unit, 16)
-      end)
-      |> List.to_string()
-    end)
-    |> Enum.filter(fn address ->
-      case address do
-        "000000" -> false
-        _ -> true
-      end
-    end)
+    |> Enum.map(
+         fn address_list ->
+           address_list[:hwaddr]
+           |> Enum.map(
+                fn hw_unit ->
+                  Integer.to_string(hw_unit, 16)
+                end
+              )
+           |> List.to_string()
+         end
+       )
+    |> Enum.filter(
+         fn address ->
+           case address do
+             "000000" -> false
+             _ -> true
+           end
+         end
+       )
     |> List.first()
   end
 

@@ -118,66 +118,74 @@ defmodule Manga do
     case platform?(url) do
       # 待选择的(话/卷)列表
       {:stages, key} ->
-        get_printer().newline()
-
-        case get_platform(key).origin.stages(Info.create(url: url)) do
-          {:ok, manga_info} ->
-            list =
-              manga_info.stage_list
-              |> Enum.with_index()
-              |> Enum.map(fn {stage, i} ->
-                get_printer().echo_result("[#{i + 1}]: #{stage.name}")
-                stage
-              end)
-
-            IOUtils.gets_numbers("\nPlease select a stage, [n/n1,n2/n1-n5,n7]: ")
-            |> Enum.each(fn n ->
-              Enum.at(list, n - 1).url
-              |> export()
-            end)
-
-          {:error, error} ->
-            get_printer().echo_error(error)
-        end
+        stage_list(key, url)
 
       # 获取漫画内容（下载并保存）
       {:fetch, key} ->
-        with {:ok, stage} <- get_origin_by_platform(key).fetch(Stage.create(url: url)),
-             {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
-             rlist <-
-               (fn ->
-                  stage = Stage.set_platform(stage, get_platform(key))
-                  converter_list = get_converter_list()
-                  render_length = length(converter_list)
-                  ProgressBar.render_export(stage.name, 0, render_length)
+        fetch_with_export(key, url)
 
-                  converter_list
-                  |> Enum.with_index()
-                  |> Enum.map(fn {{format, converter}, i} ->
-                    r = converter.save_from_stage(stage)
-                    ProgressBar.render_export(stage.name, i + 1, render_length)
-                    {format, r}
-                  end)
-                end).() do
-          get_printer().newline()
-          # 输出结果
+      {:error, error} ->
+        get_printer().echo_error(error)
+    end
+  end
 
-          rlist
-          |> Enum.map(fn r ->
-            case r do
-              {format, {:ok, path}} ->
-                %{"FORMAT" => format, "INFO" => path, "RESULT" => "✔"}
+  defp stage_list(key, url) do
+    get_printer().newline()
 
-              {format, {:error, error}} ->
-                %{"FORMAT" => format, "INFO" => error, "RESULT" => "✘"}
-            end
+    case get_platform(key).origin.stages(Info.create(url: url)) do
+      {:ok, manga_info} ->
+        list =
+          manga_info.stage_list
+          |> Enum.with_index()
+          |> Enum.map(fn {stage, i} ->
+            get_printer().echo_result("[#{i + 1}]: #{stage.name}")
+            stage
           end)
-          |> print_table
-        else
-          {:error, error} ->
-            get_printer().echo_error(error)
-        end
 
+        IOUtils.gets_numbers("\nPlease select a stage, [n/n1,n2/n1-n5,n7]: ")
+        |> Enum.each(fn n ->
+          Enum.at(list, n - 1).url
+          |> export()
+        end)
+
+      {:error, error} ->
+        get_printer().echo_error(error)
+    end
+  end
+
+  defp fetch_with_export(key, url) do
+    with {:ok, stage} <- get_origin_by_platform(key).fetch(Stage.create(url: url)),
+         {:ok, _} <- Manga.Utils.Downloader.from_stage(stage),
+         rlist <-
+           (fn ->
+              stage = Stage.set_platform(stage, get_platform(key))
+              converter_list = get_converter_list()
+              render_length = length(converter_list)
+              ProgressBar.render_export(stage.name, 0, render_length)
+
+              converter_list
+              |> Enum.with_index()
+              |> Enum.map(fn {{format, converter}, i} ->
+                r = converter.save_from_stage(stage)
+                ProgressBar.render_export(stage.name, i + 1, render_length)
+                {format, r}
+              end)
+            end).() do
+      get_printer().newline()
+      # 输出结果
+
+      rlist
+      |> Enum.map(fn r ->
+        case r do
+          {format, {:ok, path}} ->
+            %{"FORMAT" => format, "INFO" => path, "RESULT" => "✔"}
+
+          {format, {:error, error}} ->
+            %{"FORMAT" => format, "INFO" => error, "RESULT" => "✘"}
+        end
+      end)
+      |> print_table
+    else
       {:error, error} ->
         get_printer().echo_error(error)
     end
@@ -202,7 +210,7 @@ defmodule Manga do
   end
 
   defp get_converter_list do
-    converts = [{"EPUB", Manga.Res.EpubExporter}]
+    converts = [{"EPUB", Manga.Exporter.EpubExporter}]
 
     if Checker.install_converter?(),
       do:

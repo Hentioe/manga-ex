@@ -100,7 +100,9 @@ defmodule Manga.Origin.FZDMOrigin do
       stage =
         case stage.name do
           nil ->
-            Regex.scan(~r/<meta property=\"og:title\" content=\"([^\"]+)\">/i, html)
+            r = Regex.scan(~r/<meta property=\"og:title\" content=\"([^\"]+)\">/i, html)
+
+            r
             |> List.first()
             |> List.last()
             |> (&Stage.rename(stage, &1)).()
