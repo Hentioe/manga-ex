@@ -44,14 +44,17 @@ defmodule Manga.Origin.DM5Origin do
         html
         |> Floki.find("ul > li > a[title]")
         |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+          html = Floki.raw_html(link_node)
+
           Stage.create(
             name:
-              Floki.raw_html(link_node)
+              html
               |> (&Regex.scan(~r|\>(.+)\<span\>|, &1)).()
               |> List.first()
               |> List.last()
               |> String.trim(),
-            url: "http://www.dm5.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url: "http://www.dm5.com" <> (href_attr |> List.first())
           )
         end)
 

@@ -4,6 +4,13 @@ defmodule Mix.Tasks.Manga.Bundle do
   use Mix.Task
 
   def run(_args) do
+    echo_result = fn r, f ->
+      case r do
+        {:ok, path} -> IO.puts("Bundled #{f} ok, #{path}")
+        {:error, error} -> IO.puts("Bundle #{f} error: #{error}")
+      end
+    end
+
     case System.cmd("mix", ["escript.build"]) do
       {output, 0} ->
         IO.puts(output)
@@ -25,14 +32,9 @@ defmodule Mix.Tasks.Manga.Bundle do
             archive_name <> ".tar.gz",
             files |> Enum.map(fn f -> "#{Path.absname("")}/dist/#{f}" |> to_charlist() end)
           )
-          |> (fn r -> if r == :ok, do: {:ok, archive_name <> ".tar.gz"}, else: r end).()
 
-        echo_result = fn r, f ->
-          case r do
-            {:ok, path} -> IO.puts("Bundled #{f} ok, #{path}")
-            {:error, error} -> IO.puts("Bundle #{f} error: #{error}")
-          end
-        end
+        tar_r =
+          tar_r |> (fn r -> if r == :ok, do: {:ok, archive_name <> ".tar.gz"}, else: r end).()
 
         echo_result.(zip_r, "zip")
         echo_result.(tar_r, "tar.gz")

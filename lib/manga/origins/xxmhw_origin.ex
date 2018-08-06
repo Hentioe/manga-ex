@@ -45,16 +45,20 @@ defmodule Manga.Origin.XXMHWOrigin do
         html
         |> Floki.find("ul.ar_rlos_bor.ar_list_col > li > a")
         |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+
           Stage.create(
             name: Floki.text(link_node),
-            url: "https://www.177mh.net" <> (Floki.attribute(link_node, "href") |> List.first())
+            url: "https://www.177mh.net" <> (href_attr |> List.first())
           )
         end)
 
       get_name = fn -> html |> Floki.find("ul.ar_list_coc > li > h1") |> Floki.text() end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {:ok, info |> Info.reverse_stage_list()}
@@ -100,8 +104,10 @@ defmodule Manga.Origin.XXMHWOrigin do
             html |> Floki.find("#tab_srv + h1 > a") |> List.first() |> Floki.text()
           end
 
+          stage = Stage.update_plist(stage, plist)
+
           stage =
-            Stage.update_plist(stage, plist)
+            stage
             |> (fn stage ->
                   if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
                 end).()
