@@ -47,16 +47,20 @@ defmodule Manga.Origin.VeryDMOrigin do
         html
         |> Floki.find(".chapters > ul.clearfix > li > a")
         |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+
           Stage.create(
             name: Floki.text(link_node),
-            url: "http://www.verydm.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url: "http://www.verydm.com" <> (href_attr |> List.first())
           )
         end)
 
       get_name = fn -> html |> Floki.find(".comic-name > h1") |> Floki.text() end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {:ok, info}
@@ -80,8 +84,10 @@ defmodule Manga.Origin.VeryDMOrigin do
         |> Floki.attribute("src")
         |> List.first()
 
+      r = Regex.scan(~r/^(.+)\/\d{3,}.([^\/]+)$/i, url)
+
       {prefix, suffix} =
-        Regex.scan(~r/^(.+)\/\d{3,}.([^\/]+)$/i, url)
+        r
         |> List.first()
         |> (fn [_, prefix, suffix] -> {prefix, suffix} end).()
 
@@ -99,7 +105,9 @@ defmodule Manga.Origin.VeryDMOrigin do
       end
 
       get_name = fn ->
-        Floki.find(html, ~s{meta[name="keywords"]})
+        keywords_meta = Floki.find(html, ~s{meta[name="keywords"]})
+
+        keywords_meta
         |> Floki.attribute("content")
         |> List.first()
         |> String.split("，")
@@ -120,8 +128,10 @@ defmodule Manga.Origin.VeryDMOrigin do
           )
         end)
 
+      stage = Stage.update_plist(stage, plist)
+
       stage =
-        Stage.update_plist(stage, plist)
+        stage
         |> (fn stage ->
               if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
             end).()
