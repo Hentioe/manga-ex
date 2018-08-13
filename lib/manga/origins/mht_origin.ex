@@ -45,10 +45,12 @@ defmodule Manga.Origin.MHTOrigin do
         html
         |> Floki.find(~s|ul[name="topiccount"] > li > a|)
         |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+          title_attr = Floki.attribute(link_node, "title")
+
           Stage.create(
-            name: Floki.attribute(link_node, "title") |> List.first(),
-            url:
-              "http://www.manhuatai.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            name: title_attr |> List.first(),
+            url: "http://www.manhuatai.com" <> (href_attr |> List.first())
           )
         end)
 
@@ -59,8 +61,10 @@ defmodule Manga.Origin.MHTOrigin do
         |> List.first()
       end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {:ok, info}
@@ -107,8 +111,10 @@ defmodule Manga.Origin.MHTOrigin do
             html |> Floki.find(".mh_readtitle > h1 > strong") |> List.first() |> Floki.text()
           end
 
+          stage = Stage.update_plist(stage, plist)
+
           stage =
-            Stage.update_plist(stage, plist)
+            stage
             |> (fn stage ->
                   if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
                 end).()

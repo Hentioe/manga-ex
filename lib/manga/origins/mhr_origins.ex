@@ -56,12 +56,14 @@ defmodule Manga.Origin.MHROrigin do
         html
         |> Floki.find(~s|#chapterList_1 > ul > li > a|)
         |> Enum.map(fn link_node ->
+          href_attr = Floki.attribute(link_node, "href")
+          link_text = Floki.text(link_node)
+
           Stage.create(
             name:
-              Floki.text(link_node)
+              link_text
               |> String.trim(),
-            url:
-              "http://www.manhuaren.com" <> (Floki.attribute(link_node, "href") |> List.first())
+            url: "http://www.manhuaren.com" <> (href_attr |> List.first())
           )
         end)
 
@@ -73,8 +75,10 @@ defmodule Manga.Origin.MHROrigin do
         |> String.trim()
       end
 
+      info = Info.update_stage_list(info, list)
+
       info =
-        Info.update_stage_list(info, list)
+        info
         |> (fn info -> if info.name == nil, do: Info.rename(info, get_name.()), else: info end).()
 
       {:ok, info |> Info.reverse_stage_list()}
@@ -126,8 +130,10 @@ defmodule Manga.Origin.MHROrigin do
             html |> Floki.find("#title") |> List.first() |> Floki.text()
           end
 
+          stage = Stage.update_plist(stage, plist)
+
           stage =
-            Stage.update_plist(stage, plist)
+            stage
             |> (fn stage ->
                   if stage.name == nil, do: Stage.rename(stage, get_name.()), else: stage
                 end).()
