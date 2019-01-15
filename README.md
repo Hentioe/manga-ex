@@ -4,7 +4,7 @@ Online comic offline export tool, implemented using Elixir!
 
 ## 说明
 
-将漫画网站的资源直接导出为离线阅读文件（EPUB/MOBI/PDF）。此项目正处于开发阶段：）
+将漫画网站的资源直接导出为离线阅读文件（EPUB/MOBI/PDF）。 ~~此项目正处于开发阶段：）~~ 最新状态：此项目基本停止维护，新的[替代品](https://github.com/Hentioe/manga-rs)正在开发中，当新项目成熟以后会关闭此项目：(
 
 
 需要注意的是，这是一个使用 Elixir 实现的项目。它的运行需要依赖 [Erlang]()，就像 Java 软件需要 JRE 那样 :)
