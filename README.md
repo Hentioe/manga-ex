@@ -1,4 +1,4 @@
-# 这个项目已经死亡很久了，但这并不表示我放弃了它：新的更小、更快、依赖更少的 [manga](https://github.com/Hentioe/manga-rs) 继续在这里成长！
+# 这个项目已经死亡很久了，但这并不表示我放弃了它：新的更小、更快、依赖更少的 [manga](https://github.com/Hentioe/manga-rs) 继续在成长！
 
 # Manga
 
